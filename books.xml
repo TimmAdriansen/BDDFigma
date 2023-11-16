@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book>
+    <title>The Adventures of Sherlock Holmes</title>
+    <author>Arthur Conan Doyle</author>
+    <genre>Detective fiction</genre>
+    <publication_year>1892</publication_year>
+    <isbn>978-0143133731</isbn>
+    <pages>272</pages>
+    <price>15.99</price>
+    <description>A collection of twelve short stories featuring the iconic detective Sherlock Holmes.</description>
+</book>

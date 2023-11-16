@@ -1,0 +1,15 @@
+{
+  "name": "BDDFigma",
+  "id": "1303737403058817138",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": [
+    "figma"
+  ],
+  "ui": "xmldrop2.html",
+  "networkAccess": {
+    "allowedDomains": ["https://unpkg.com", "https://cdn.jsdelivr.net"]
+  }
+}

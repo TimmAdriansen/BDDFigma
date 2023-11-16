@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML File Drop Zone</title>
+    <style>
+        #dropzone {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Drop XML Files Here</h1>
+    <div id="dropzone">
+        <p>Drop your XML files here to view their contents.</p>
+    </div>
+
+    <script>
+        const dropzone = document.getElementById('dropzone');
+
+        dropzone.addEventListener('drop', (event) => {
+            event.preventDefault();
+
+            if (event.dataTransfer.files.length > 0) {
+                const file = event.dataTransfer.files[0];
+
+                if (file.type === 'application/xml') {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(event.target.result, 'text/xml');
+                        console.log(xmlDoc.documentElement.outerHTML);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('Please drop only XML files.');
+                }
+            }
+        });
+
+        dropzone.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropzone.classList.add('highlight');
+        });
+
+        dropzone.addEventListener('dragleave', (event) => {
+            dropzone.classList.remove('highlight');
+        });
+    </script>
+</body>
+</html>
