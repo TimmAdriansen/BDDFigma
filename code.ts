@@ -8,6 +8,24 @@
 
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
+/*figma.showUI(`<!DOCTYPE html>
+<html>
+  <body>
+    <button id="btn">Click me</button>
+    <script>
+      document.getElementById('btn').onclick = () => {
+        fetch('http://localhost:3000')
+          .then(response => response.json())
+          .then(data => {
+            console.log('Data from server:', data);
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      };
+    </script>
+  </body>
+</html>`, { width: 240, height: 100 });*/
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the

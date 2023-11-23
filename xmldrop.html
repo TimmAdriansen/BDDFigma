@@ -1,55 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XML File Drop Zone</title>
-    <style>
-        #dropzone {
-            background-color: #eee;
-            border: 1px solid #ccc;
-            padding: 20px;
-            text-align: center;
-        }
-    </style>
+    <title>XML File Reader</title>
 </head>
+
 <body>
-    <h1>Drop XML Files Here</h1>
-    <div id="dropzone">
-        <p>Drop your XML files here to view their contents.</p>
+    <h1>Drop an XML file here</h1>
+    <input type="file" id="xmlFileInput" accept=".xml" style="display: none;" />
+    <div id="dropArea" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
+        Drop XML file here
     </div>
+    <pre id="output" style="white-space: pre-wrap;"></pre>
 
     <script>
-        const dropzone = document.getElementById('dropzone');
+        const dropArea = document.getElementById('dropArea');
+        const xmlFileInput = document.getElementById('xmlFileInput');
+        const output = document.getElementById('output');
 
-        dropzone.addEventListener('drop', (event) => {
-            event.preventDefault();
+        // Prevent the default behavior of the browser when a file is dragged over the drop area.
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.style.border = '2px dashed #333';
+        });
 
-            if (event.dataTransfer.files.length > 0) {
-                const file = event.dataTransfer.files[0];
+        // Restore the drop area's style when the dragged file leaves.
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.border = '2px dashed #ccc';
+        });
 
-                if (file.type === 'application/xml') {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const parser = new DOMParser();
-                        const xmlDoc = parser.parseFromString(event.target.result, 'text/xml');
-                        console.log(xmlDoc.documentElement.outerHTML);
-                    };
-                    reader.readAsText(file);
-                } else {
-                    alert('Please drop only XML files.');
-                }
+        // Handle the dropped file.
+        //We can change this to only allow feature files if we can get it to work in the future :)
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.style.border = '2px dashed #ccc';
+
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.xml')) {
+                readXMLFile(file);
+            } else {
+                alert('Please drop a valid XML file.');
             }
         });
 
-        dropzone.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropzone.classList.add('highlight');
+        // Clicking on the drop area triggers the file input element.
+        dropArea.addEventListener('click', () => {
+            xmlFileInput.click();
         });
 
-        dropzone.addEventListener('dragleave', (event) => {
-            dropzone.classList.remove('highlight');
+        // Handle file selection through the file input element.
+        xmlFileInput.addEventListener('change', () => {
+            const file = xmlFileInput.files[0];
+            if (file && file.name.endsWith('.xml')) {
+                readXMLFile(file);
+            } else {
+                alert('Please select a valid XML file.');
+            }
         });
+
+        // Read and display the content of the XML file.
+        function readXMLFile(file) {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const xmlContent = event.target.result;
+                output.textContent = xmlContent;
+                parent.postMessage({ pluginMessage: { type: 'xml-drop', xmlContent } }, '*')
+            };
+
+            reader.readAsText(file);
+        }
     </script>
 </body>
+
 </html>

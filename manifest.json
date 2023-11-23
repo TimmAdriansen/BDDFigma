@@ -8,8 +8,9 @@
   "editorType": [
     "figma"
   ],
-  "ui": "xmldrop2.html",
+  "ui": "localhostFetcher.html",
   "networkAccess": {
-    "allowedDomains": ["https://unpkg.com", "https://cdn.jsdelivr.net"]
+    "allowedDomains": ["http://localhost:3000"],
+    "reasoning": "for getting xml"
   }
 }
