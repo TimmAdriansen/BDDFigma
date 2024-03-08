@@ -1,16 +1,28 @@
 {
-  "name": "BDDFigma",
+  "name": "bddfigma",
   "version": "1.0.0",
   "description": "Your Figma Plugin",
   "main": "code.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "webpack",
     "watch": "npm run build -- --watch"
   },
   "author": "",
-  "license": "",
+  "license": "ISC",
   "devDependencies": {
     "@figma/plugin-typings": "*",
-    "typescript": "*"
-  }
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimmAdriansen/BDDFigma.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/TimmAdriansen/BDDFigma/issues"
+  },
+  "homepage": "https://github.com/TimmAdriansen/BDDFigma#readme"
 }
