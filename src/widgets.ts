@@ -2,28 +2,37 @@ type FunctionMap = {
     [key: string]: (...args: any[]) => void;
 };
 
+interface Position {
+    page: string,
+    instance: InstanceNode,
+    id: string,
+    gridY: number;
+}
+
 const startOffset = { x: 50, y: 200 }; // Starting position for the first instance
 const gridSpacing = { x: 20, y: 20 }; // Spacing between instances
+const frameSize = { x: 1200, y: 900 };
+let positions: Position[] = [];
 
-async function button(page: string, title: string): Promise<void> {
-    const component = findComponentByName("Size=Regular, Type=Primary, State=Default");
+async function button(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionButton");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceInGrid(component, currentFrame, startOffset, gridSpacing);
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
 
     if (newInstance) {
-        await setTextOfInstance(newInstance, title);
+        await setTextOfInstance(newInstance, id);
     }
 
 }
 
-async function browserWindow(title: string): Promise<void> {
-
+async function browserWindow(id: string): Promise<void> {
+    resetPositionsArray(id);
     try {
         const frame = figma.createFrame();
-        frame.name = title;
-        frame.resize(1200, 900);
+        frame.name = id;
+        frame.resize(frameSize.x, frameSize.y);
         const maxX = 1000;
         const maxY = 1000;
         frame.x = Math.floor(Math.random() * maxX);
@@ -37,7 +46,7 @@ async function browserWindow(title: string): Promise<void> {
         await figma.loadFontAsync(font);
 
         textNode.fontName = font;
-        textNode.characters = title;
+        textNode.characters = id;
         textNode.fontSize = 42;
 
         await figma.loadFontAsync(textNode.fontName as FontName);
@@ -67,9 +76,108 @@ async function browserWindow(title: string): Promise<void> {
 
 }
 
+async function textField(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionInputField");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+
+    if (newInstance) {
+        await setTextOfInstance(newInstance, id);
+    }
+}
+
+async function searchBox(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionSearchField");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+}
+
+
+async function radioButton(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionRadioButton");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+
+    if (newInstance) {
+        await setTextOfInstance(newInstance, id);
+    }
+}
+
+async function toggleButton(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionToggle");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+
+    if (newInstance) {
+        await setTextOfInstance(newInstance, id);
+    }
+}
+
+async function checkBox(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionCheckbox");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+
+    if (newInstance) {
+        await setTextOfInstance(newInstance, id);
+    }
+}
+
+async function image(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionImage");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+}
+
+async function calendar(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionCalendar");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+}
+
+async function timePicker(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionTimePicker");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+}
+
+async function icon(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionIconButton");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceInGridFromSet(component, currentFrame, startOffset, gridSpacing, id);
+}
+
 const functionMap: FunctionMap = {
     "Button": button,
-    "BrowserWindow": browserWindow
+    "BrowserWindow": browserWindow,
+    "TextField": textField,
+    "SearchBox": searchBox,
+    "RadioButton": radioButton,
+    "ToggleButton": toggleButton,
+    "CheckBox": checkBox,
+    "Image": image,
+    "Calendar": calendar,
+    "TimePicker": timePicker,
+    "Icon": icon
+
 };
 
 export async function callFunctionByName(functionName: string, params: any[] = []): Promise<void> {
@@ -99,9 +207,8 @@ export async function setText(node: TextNode, text: string): Promise<void> {
     node.characters = text;
 }
 
-function findComponentByName(name: string): ComponentNode | null {
-    const components = figma.root.findAll(node => node.type === "COMPONENT" && node.name === name) as ComponentNode[];
-    return components.length > 0 ? components[0] : null;
+function findComponentSetByName(name: string): ComponentSetNode | null {
+    return figma.root.findOne(node => node.type === "COMPONENT_SET" && node.name === name) as ComponentSetNode | null;
 }
 
 function findFrameByName(name: string): FrameNode | null {
@@ -109,9 +216,9 @@ function findFrameByName(name: string): FrameNode | null {
     return frame;
 }
 
-function createInstanceInGrid(component: ComponentNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }): InstanceNode | null {
-    if (!component) {
-        console.error("Component not found.");
+function createInstanceInGridFromSet(componentSet: ComponentSetNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }, id: string): InstanceNode | null {
+    if (!componentSet) {
+        console.error("Component set not found.");
         return null;
     }
 
@@ -120,51 +227,82 @@ function createInstanceInGrid(component: ComponentNode | null, targetFrame: Fram
         return null;
     }
 
-    // Calculate the position for the new instance
-    let maxX = startOffset.x;
-    let maxY = startOffset.y;
-    let newRow = false;
-
-    targetFrame.children.forEach(child => {
-        if (child.type === "INSTANCE" && child.mainComponent === component) {
-            maxX = Math.max(maxX, child.x + child.width + gridSpacing.x);
-
-            // Check if we need to start a new row
-            if (maxX + component.width + gridSpacing.x > targetFrame.width) {
-                maxX = startOffset.x;
-                newRow = true;
-            }
-
-            if (newRow) {
-                maxY = Math.max(maxY, child.y + child.height + gridSpacing.y);
-                newRow = false;
-            }
+    if (positions.length != 0) {
+        let previousInstancePositions = positions[positions.length - 1];
+        if (previousInstancePositions.page != targetFrame.name) {
+            resetPositionsArray(targetFrame.name);
         }
-    });
+    }
 
-    // Create the instance and set its position
-    const instance = component.createInstance();
-    instance.x = maxX;
-    instance.y = maxY;
+    // Assuming you want to instantiate the default variant, or adjust this logic for a specific variant
+    const componentToInstantiate = componentSet.defaultVariant;
+
+    const instance = componentToInstantiate.createInstance();
+    instance.name = targetFrame.name + ":" + id;
+
+    if (positions.length == 0) {
+        instance.x = startOffset.x;
+        instance.y = startOffset.y;
+
+        positions.push({
+            page: targetFrame.name,
+            instance: instance,
+            id: id,
+            gridY: 1
+        });
+        targetFrame.appendChild(instance);
+        return instance;
+    }
+
+    let previousInstancePositions = positions[positions.length - 1];
+
+    if (previousInstancePositions.instance.x + previousInstancePositions.instance.width + gridSpacing.x + componentToInstantiate.width > frameSize.x - startOffset.x) {
+        let gridY = previousInstancePositions.gridY + 1;
+        instance.x = startOffset.x;
+        instance.y = startOffset.y * gridY;
+
+        positions.push({
+            page: targetFrame.name,
+            instance: instance,
+            id: id,
+            gridY: gridY
+        });
+        targetFrame.appendChild(instance);
+        return instance;
+    }
+
+    instance.x = previousInstancePositions.instance.x + previousInstancePositions.instance.width + gridSpacing.x;
+    instance.y = startOffset.y * previousInstancePositions.gridY;
+
+    positions.push({
+        page: targetFrame.name,
+        instance: instance,
+        id: id,
+        gridY: previousInstancePositions.gridY
+    });
 
     targetFrame.appendChild(instance);
 
     return instance;
 }
 
+function resetPositionsArray(title: string) {
+    positions = []
+}
+
+
+
 async function setTextOfInstance(instance: InstanceNode, text: string): Promise<void> {
     // Find the text node within the instance
-    const textNodes = instance.findAll(node => node.type === "TEXT") as TextNode[];
-    if (textNodes.length > 0) {
-        // Assuming you want to change the text of the first text node found within the component
-        const textNode = textNodes[0];
+    const textNode = instance.findOne(node => node.type === "TEXT" && node.name === "Label") as TextNode;
 
+    if (textNode) {
         // Load the font for the text node before setting its characters
         await figma.loadFontAsync(textNode.fontName as FontName);
 
         // Now that the font is loaded, set the text
         textNode.characters = text;
     } else {
-        console.error("No text node found within the instance.");
+        console.error("No text node named 'Label' found within the instance.");
     }
 }

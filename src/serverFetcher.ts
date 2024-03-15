@@ -42,7 +42,7 @@ function loopData(data: string): void {
 
     if (targetPage) {
         figma.currentPage = targetPage;
-        console.log("Switched to page: " + targetPageName);
+        //console.log("Switched to page: " + targetPageName);
     }
 
     for (const node of figma.currentPage.children) {
@@ -56,7 +56,7 @@ function loopData(data: string): void {
         const jsonData = JSON.parse(data);
         jsonData.BrowserWindows.forEach(async (window: { page: string; widgets: Array<{ widget: string; id: string }> }) => {
             await callFunctionByName("BrowserWindow", [window.page]);
-            console.log(`Page: ${window.page}`);
+            //console.log(`Page: ${window.page}`);
             window.widgets.forEach(async (widget, index) => {
                 await callFunctionByName(widget.widget, [window.page, widget.id]);
                 console.log(` Widget ${index + 1}: Type - ${widget.widget}, ID - ${widget.id}`);
