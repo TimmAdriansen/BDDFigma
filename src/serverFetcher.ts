@@ -1,4 +1,5 @@
-import { callFunctionByName } from "./widgets";
+import { callFunctionByName, setTextOfInstance, resetAllPositions, layoutPages} from "./widgets";
+
 
 export function pollServer(lastPolledTime = Date.now()) {
     const url = `http://localhost:3000/xmlRequest?lastPolled=${lastPolledTime}`;
@@ -15,7 +16,7 @@ export function pollServer(lastPolledTime = Date.now()) {
             if (data) {
                 //console.log('Data from server:', data);
                 if (data !== '<empty><empty>') {
-                    console.log('Data from server:', data);
+                    //console.log('Data from server:', data);
                     loopData(data);
                     //parent.postMessage({ pluginMessage: { type: 'create-button' } }, '*')
                 }
@@ -35,8 +36,7 @@ interface BrowserWindow {
     widgets: any[];
 }
 
-function loopData(data: string): void {
-
+async function loopData(data: string): Promise<void> {
     const targetPageName = "New Page";
     let targetPage = figma.root.children.find(page => page.name === targetPageName);
 
@@ -46,23 +46,28 @@ function loopData(data: string): void {
     }
 
     for (const node of figma.currentPage.children) {
-        // Check if the node is a frame
+        // Check if the node is a frame, component, or instance
         if (node.type === 'FRAME' || node.type === 'COMPONENT' || node.type === 'INSTANCE') {
-            // Remove the frame
+            // Remove the node
             node.remove();
         }
     }
     try {
         const jsonData = JSON.parse(data);
-        jsonData.BrowserWindows.forEach(async (window: { page: string; widgets: Array<{ widget: string; id: string }> }) => {
+        for (const window of jsonData.BrowserWindows) {
+            //await resetAllPositions();
             await callFunctionByName("BrowserWindow", [window.page]);
             //console.log(`Page: ${window.page}`);
-            window.widgets.forEach(async (widget, index) => {
+            for (const widget of window.widgets) {
                 await callFunctionByName(widget.widget, [window.page, widget.id]);
-                console.log(` Widget ${index + 1}: Type - ${widget.widget}, ID - ${widget.id}`);
-            });
-        });
+                //console.log(` Widget: Type - ${widget.widget}, ID - ${widget.id}`);
+            }
+            //await pushToAllPositions();
+        }
+        layoutPages(); // Call layoutPages after all the asynchronous operations have completed
+        resetAllPositions();
     } catch (error) {
         console.error("Error parsing data:", error);
     }
 }
+
