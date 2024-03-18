@@ -9,6 +9,9 @@ interface Position {
     gridY: number;
 }
 
+let collection: VariableCollection;
+let modeId: string;
+
 const startOffset = { x: 50, y: 200 }; // Starting position for the first instance
 const gridSpacing = { x: 20, y: 20 }; // Spacing between instances
 const frameSize = { x: 1200, y: 900 };
@@ -19,7 +22,7 @@ async function button(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
@@ -27,8 +30,14 @@ async function button(page: string, id: string): Promise<void> {
 
 }
 
-async function browserWindow(id: string): Promise<void> {
+async function browserWindow(id: string, first: boolean): Promise<void> {
     //resetPositionsArray(id);
+
+    if (first) {
+        collection = figma.variables.createVariableCollection("new-collection")
+        modeId = collection.modes[0].modeId
+    }
+
     try {
         const frame = figma.createFrame();
         frame.name = id;
@@ -81,10 +90,61 @@ async function textField(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    if (!component) {
+        return;
+    }
 
-    if (newInstance) {
-        await setTextOfInstance(newInstance, id);
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+
+        let reactions = clone(specificVariant.reactions);
+
+        let name = page + ":" + id;
+
+        const textVar = figma.variables.createVariable(name, collection.id, "STRING");
+
+        let startString = "Type here";
+
+        // Assuming getTypingReactions is a function that you have that configures reactions based on the text variable
+        reactions = getTypingReactions(textVar.id, startString, reactions);
+
+        specificVariant.reactions = reactions;
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+
+        if (newInstance) {
+            const textNode = newInstance.findOne(child => child.name === 'Text' && child.type === 'TEXT') as TextNode;
+
+            if (textNode) {
+                textVar.setValueForMode(modeId, startString);
+                textNode.setBoundVariable('characters', textVar.id);
+            }
+
+            //let reactions = clone(newInstance.reactions);
+
+            // Assuming getTypingReactions is a function that you have that configures reactions based on the text variable
+            //reactions = getTypingReactions(textVar.id, startString, reactions);
+
+            //newInstance.reactions = reactions;
+
+            await setTextOfInstance(newInstance, id);
+        }
     }
 }
 
@@ -93,7 +153,60 @@ async function searchBox(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    if (!component) {
+        return;
+    }
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+
+        let reactions = clone(specificVariant.reactions);
+
+        let name = page + ":" + id;
+
+        const textVar = figma.variables.createVariable(name, collection.id, "STRING");
+
+        let startString = "Search here";
+
+        // Assuming getTypingReactions is a function that you have that configures reactions based on the text variable
+        reactions = getTypingReactions(textVar.id, startString, reactions);
+
+        specificVariant.reactions = reactions;
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+
+        if (newInstance) {
+            const textNode = newInstance.findOne(child => child.name === 'Text' && child.type === 'TEXT') as TextNode;
+
+            if (textNode) {
+                textVar.setValueForMode(modeId, startString);
+                textNode.setBoundVariable('characters', textVar.id);
+            }
+
+            //let reactions = clone(newInstance.reactions);
+
+            // Assuming getTypingReactions is a function that you have that configures reactions based on the text variable
+            //reactions = getTypingReactions(textVar.id, startString, reactions);
+
+            //newInstance.reactions = reactions;
+        }
+    }
 }
 
 
@@ -102,7 +215,7 @@ async function radioButton(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
@@ -114,7 +227,7 @@ async function toggleButton(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
@@ -126,7 +239,7 @@ async function checkBox(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
@@ -138,7 +251,7 @@ async function image(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 }
 
 async function calendar(page: string, id: string): Promise<void> {
@@ -146,7 +259,7 @@ async function calendar(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 }
 
 async function timePicker(page: string, id: string): Promise<void> {
@@ -154,7 +267,7 @@ async function timePicker(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 }
 
 async function icon(page: string, id: string): Promise<void> {
@@ -162,7 +275,7 @@ async function icon(page: string, id: string): Promise<void> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 }
 
 const functionMap: FunctionMap = {
@@ -200,7 +313,7 @@ function findFrameByName(name: string): FrameNode | null {
     return frame;
 }
 
-function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }, id: string): InstanceNode | null {
+function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }, id: string, variant: ComponentNode | null): InstanceNode | null {
     if (!componentSet) {
         console.error("Component set not found.");
         return null;
@@ -211,7 +324,14 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
         return null;
     }
 
-    const componentToInstantiate = componentSet.defaultVariant;
+
+    let componentToInstantiate;
+
+    if (variant != null) {
+        componentToInstantiate = variant;
+    } else {
+        componentToInstantiate = componentSet.defaultVariant;
+    }
 
     const instance = componentToInstantiate.createInstance();
     instance.name = targetFrame.name + ":" + id;
@@ -230,7 +350,7 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
     return instance;
 }
 
-export async function setTextOfInstance(instance: InstanceNode, text: string): Promise<void> {
+async function setTextOfInstance(instance: InstanceNode, text: string): Promise<void> {
     // Find the text node within the instance
     const textNode = instance.findOne(node => node.type === "TEXT" && node.name === "Label") as TextNode;
 
@@ -304,4 +424,204 @@ export function layoutPages() {
 
         })
     }
+}
+
+function clone(val: any) {
+    return JSON.parse(JSON.stringify(val))
+}
+
+function getTypingReactions(id: string, startString: string, reactions: any) {
+    // Loop through lowercase letters 'a' to 'z'
+    for (let i = 0; i < 26; i++) {
+        const letter = String.fromCharCode(97 + i); // Convert i to corresponding letter
+        const keyCode = 65 + i; // Adjust the keycode starting from 65 for 'a'
+
+        const reaction = {
+            "action": {
+                "type": "CONDITIONAL",
+                "conditionalBlocks": [
+                    {
+                        "actions": [
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": id,
+                                "variableValue": {
+                                    "value": letter, // Use the current letter
+                                    "type": "STRING",
+                                    "resolvedType": "STRING"
+                                }
+                            }
+                        ],
+                        "condition": {
+                            "value": {
+                                "expressionArguments": [
+                                    {
+                                        "value": {
+                                            "type": "VARIABLE_ALIAS",
+                                            "id": id
+                                        },
+                                        "type": "VARIABLE_ALIAS",
+                                        "resolvedType": "STRING"
+                                    },
+                                    {
+                                        "value": startString,
+                                        "type": "STRING",
+                                        "resolvedType": "STRING"
+                                    }
+                                ],
+                                "expressionFunction": "EQUALS"
+                            },
+                            "type": "EXPRESSION",
+                            "resolvedType": "BOOLEAN"
+                        }
+                    },
+                    {
+                        "actions": [
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": id,
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": id
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "STRING"
+                                            },
+                                            {
+                                                "value": letter, // Use the current letter
+                                                "type": "STRING",
+                                                "resolvedType": "STRING"
+                                            }
+                                        ],
+                                        "expressionFunction": "ADDITION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "STRING"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "actions": [
+                {
+                    "type": "CONDITIONAL",
+                    "conditionalBlocks": [
+                        {
+                            "actions": [
+                                {
+                                    "type": "SET_VARIABLE",
+                                    "variableId": id,
+                                    "variableValue": {
+                                        "value": letter, // Use the current letter
+                                        "type": "STRING",
+                                        "resolvedType": "STRING"
+                                    }
+                                }
+                            ],
+                            "condition": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": id
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "STRING"
+                                        },
+                                        {
+                                            "value": startString,
+                                            "type": "STRING",
+                                            "resolvedType": "STRING"
+                                        }
+                                    ],
+                                    "expressionFunction": "EQUALS"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "BOOLEAN"
+                            }
+                        },
+                        {
+                            "actions": [
+                                {
+                                    "type": "SET_VARIABLE",
+                                    "variableId": id,
+                                    "variableValue": {
+                                        "value": {
+                                            "expressionArguments": [
+                                                {
+                                                    "value": {
+                                                        "type": "VARIABLE_ALIAS",
+                                                        "id": id
+                                                    },
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "resolvedType": "STRING"
+                                                },
+                                                {
+                                                    "value": letter, // Use the current letter
+                                                    "type": "STRING",
+                                                    "resolvedType": "STRING"
+                                                }
+                                            ],
+                                            "expressionFunction": "ADDITION"
+                                        },
+                                        "type": "EXPRESSION",
+                                        "resolvedType": "STRING"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "trigger": {
+                "type": "ON_KEY_DOWN",
+                "device": "KEYBOARD",
+                "keyCodes": [
+                    keyCode // Use the adjusted keycode
+                ]
+            }
+        };
+
+        reactions.push(reaction);
+    }
+
+    const reaction = {
+        "action": {
+            "type": "SET_VARIABLE",
+            "variableId": id,
+            "variableValue": {
+                "value": startString,
+                "type": "STRING",
+                "resolvedType": "STRING"
+            }
+        },
+        "actions": [
+            {
+                "type": "SET_VARIABLE",
+                "variableId": id,
+                "variableValue": {
+                    "value": startString,
+                    "type": "STRING",
+                    "resolvedType": "STRING"
+                }
+            }
+        ],
+        "trigger": {
+            "type": "ON_KEY_DOWN",
+            "device": "KEYBOARD",
+            "keyCodes": [
+                8
+            ]
+        }
+    }
+
+    reactions.push(reaction);
+
+    return reactions;
 }

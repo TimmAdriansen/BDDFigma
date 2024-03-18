@@ -1,4 +1,4 @@
-import { callFunctionByName, setTextOfInstance, resetAllPositions, layoutPages} from "./widgets";
+import { callFunctionByName, resetAllPositions, layoutPages} from "./widgets";
 
 
 export function pollServer(lastPolledTime = Date.now()) {
@@ -31,10 +31,6 @@ export function pollServer(lastPolledTime = Date.now()) {
         });
 }
 
-interface BrowserWindow {
-    page: string;
-    widgets: any[];
-}
 
 async function loopData(data: string): Promise<void> {
     const targetPageName = "New Page";
@@ -45,18 +41,30 @@ async function loopData(data: string): Promise<void> {
         //console.log("Switched to page: " + targetPageName);
     }
 
+    console.log(figma.currentPage.children);
+
     for (const node of figma.currentPage.children) {
         // Check if the node is a frame, component, or instance
-        if (node.type === 'FRAME' || node.type === 'COMPONENT' || node.type === 'INSTANCE') {
+        if (node.type === 'FRAME' || node.type === 'COMPONENT' || node.type === 'INSTANCE' || node.type === "COMPONENT_SET") {
             // Remove the node
             node.remove();
         }
     }
+
+    const localCollections = figma.variables.getLocalVariableCollections();
+    
+    const collection = localCollections.find((c) => c.name === 'new-collection');
+
+    collection?.remove();
+
+
     try {
         const jsonData = JSON.parse(data);
+        let first = true;
         for (const window of jsonData.BrowserWindows) {
             //await resetAllPositions();
-            await callFunctionByName("BrowserWindow", [window.page]);
+            await callFunctionByName("BrowserWindow", [window.page, first]);
+            first = false;
             //console.log(`Page: ${window.page}`);
             for (const widget of window.widgets) {
                 await callFunctionByName(widget.widget, [window.page, widget.id]);
