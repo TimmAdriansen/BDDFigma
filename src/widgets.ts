@@ -298,8 +298,8 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
     let newComponent = component.clone()
     newComponent.name = "toDelete"
 
-    newComponent.x = 0;
-    newComponent.y = 0;
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
 
     figma.currentPage.appendChild(newComponent);
 
@@ -411,24 +411,120 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
         }
         await setTextOfInstance(newInstance, id);
     }
+
+    newComponent.remove();
 }
 
 async function listBox(page: string, id: string, widgets: any[]): Promise<void> {
     const component = findComponentSetByName("InteractionListBox");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    if (!component) {
+        return;
+    }
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let openVariant = null;
+    for (const variant of newComponent.children) {
+        if (variant.name === "Type=Open Multi-select" && "children" in variant) {
+            openVariant = variant;
+        }
+    }
+
+    if (openVariant && "children" in openVariant) {
+        const containerVariant = openVariant as FrameNode | GroupNode | ComponentNode | InstanceNode;
+
+        const textInputChild = containerVariant.children.find(child => child.name === "Text Input");
+
+
+        if (textInputChild && "children" in textInputChild) {
+            const MenuItem = textInputChild.children.find(child => child.name === ".Multi-select menu item");
+
+            let i = 0;
+
+            for (const widget of widgets) {
+                if (i == 0) {
+                    if (MenuItem && "children" in MenuItem) {
+                        const textChild = MenuItem.children.find(child => child.type === "TEXT") as TextNode;
+
+                        if (textChild) {
+                            textChild.characters = widget.id;
+                        }
+                    }
+                    i++
+                    continue
+                }
+                const newMenu = MenuItem?.clone();
+
+                if (newMenu && "children" in newMenu) {
+                    textInputChild.appendChild(newMenu);
+
+                    const textChild = newMenu.children.find(child => child.type === "TEXT") as TextNode;
+
+                    if (textChild) {
+                        textChild.characters = widget.id;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
     }
+
+    newComponent.remove();
 }
 
+//EXAMPLE OF GO TO PAGE WORKING!
 async function menu(page: string, id: string, widgets: any[]): Promise<void> {
     const component = findComponentSetByName("InteractionMenu");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    if (!component) {
+        return;
+    }
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    if (newComponent && "children" in newComponent) {
+
+        const containerVariant = newComponent.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+        if (containerVariant && "children" in containerVariant) {
+            const yeet = containerVariant.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+            
+            let secondFrame: FrameNode | null = findFrameByName("New Window");
+            if (secondFrame) {
+                let reactions = clone(yeet.reactions);
+                reactions = goToPage(reactions, secondFrame.id)
+                yeet.reactions = reactions;
+            }
+        }
+
+    }
+
+
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+    }
 }
 
 const functionMap: FunctionMap = {
@@ -786,6 +882,42 @@ function getTypingReactions(id: string, startString: string, reactions: any) {
     return reactions;
 }
 
-function goToPage() {
+function goToPage(reactions: any, pageID: string) {
+    const reaction =
+    {
+        "action": {
+            "type": "NODE",
+            "destinationId": pageID,
+            "navigation": "NAVIGATE",
+            "transition": {
+                "type": "SMART_ANIMATE",
+                "easing": {
+                    "type": "EASE_OUT"
+                },
+                "duration": 0.30000001192092896
+            },
+            "resetVideoPosition": false
+        },
+        "actions": [
+            {
+                "type": "NODE",
+                "destinationId": pageID,
+                "navigation": "NAVIGATE",
+                "transition": {
+                    "type": "SMART_ANIMATE",
+                    "easing": {
+                        "type": "EASE_OUT"
+                    },
+                    "duration": 0.30000001192092896
+                },
+                "resetVideoPosition": false
+            }
+        ],
+        "trigger": {
+            "type": "ON_CLICK"
+        }
+    }
 
+    reactions.push(reaction);
+    return reactions;
 }
