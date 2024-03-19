@@ -310,6 +310,10 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
         }
     }
 
+    let name = page + ":" + id + ":var:";
+
+    const textVar = figma.variables.createVariable(name, collection.id, "STRING");
+
     if (openVariant && "children" in openVariant) {
         const containerVariant = openVariant as FrameNode | GroupNode | ComponentNode | InstanceNode;
 
@@ -323,7 +327,31 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
 
             for (const widget of widgets) {
                 if (i == 0) {
-                    if (MenuItem && "children" in MenuItem) {
+                    if (MenuItem && "children" in MenuItem && ("reactions" in MenuItem)) {
+                        const menuItemWithReactions = MenuItem as FrameNode | ComponentNode | InstanceNode;
+
+                        let reactions = clone(menuItemWithReactions.reactions);
+
+                        for (const reaction of reactions) {
+                            for (let i = 0; i < reaction.actions.length; i++) {
+                                // Checking if the current action is the one to replace
+                                if (reaction.actions[i].type === "SET_VARIABLE") {
+                                    // Replace the action with new details
+                                    reaction.actions[i] = {
+                                        type: "SET_VARIABLE",
+                                        variableId: textVar.id, // Assuming 'textVar.id' holds the new variable ID you want to use
+                                        variableValue: {
+                                            value: widget.id, // Assuming 'widget.id' is the new value you want to set
+                                            type: "STRING",
+                                            resolvedType: "STRING"
+                                        }
+                                    };
+                                }
+                            }
+                        }
+
+                        menuItemWithReactions.reactions = reactions;
+
                         const textChild = MenuItem.children.find(child => child.type === "TEXT") as TextNode;
 
                         if (textChild) {
@@ -338,6 +366,30 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
                 if (newMenu && "children" in newMenu) {
                     textInputChild.appendChild(newMenu);
 
+                    const newMenuItemWithReactions = newMenu as FrameNode | ComponentNode | InstanceNode;
+
+                    let reactions = clone(newMenuItemWithReactions.reactions);
+
+                    for (const reaction of reactions) {
+                        for (let i = 0; i < reaction.actions.length; i++) {
+                            // Checking if the current action is the one to replace
+                            if (reaction.actions[i].type === "SET_VARIABLE") {
+                                // Replace the action with new details
+                                reaction.actions[i] = {
+                                    type: "SET_VARIABLE",
+                                    variableId: textVar.id, // Assuming 'textVar.id' holds the new variable ID you want to use
+                                    variableValue: {
+                                        value: widget.id, // Assuming 'widget.id' is the new value you want to set
+                                        type: "STRING",
+                                        resolvedType: "STRING"
+                                    }
+                                };
+                            }
+                        }
+                    }
+
+                    newMenuItemWithReactions.reactions = reactions;
+
                     const textChild = newMenu.children.find(child => child.type === "TEXT") as TextNode;
 
                     if (textChild) {
@@ -350,9 +402,13 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
 
     const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
 
-
-
     if (newInstance) {
+        const textNode = newInstance.findOne(child => child.name === 'Text' && child.type === 'TEXT') as TextNode;
+
+        if (textNode) {
+            textVar.setValueForMode(modeId, "Select option");
+            textNode.setBoundVariable('characters', textVar.id);
+        }
         await setTextOfInstance(newInstance, id);
     }
 }
