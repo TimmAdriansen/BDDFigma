@@ -1,4 +1,4 @@
-import { callFunctionByName, resetAllPositions, layoutPages} from "./widgets";
+import { callFunctionByName, resetAllPositions, layoutPages } from "./widgets";
 
 
 export function pollServer(lastPolledTime = Date.now()) {
@@ -52,7 +52,7 @@ async function loopData(data: string): Promise<void> {
     }
 
     const localCollections = figma.variables.getLocalVariableCollections();
-    
+
     const collection = localCollections.find((c) => c.name === 'new-collection');
 
     collection?.remove();
@@ -67,7 +67,11 @@ async function loopData(data: string): Promise<void> {
             first = false;
             //console.log(`Page: ${window.page}`);
             for (const widget of window.widgets) {
-                await callFunctionByName(widget.widget, [window.page, widget.id]);
+                if (widget.widget === "FieldSet" || widget.widget === "DropdownList" || widget.widget === "ListBox" || widget.widget === "Menu") {
+                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.widgets]);
+                } else {
+                    await callFunctionByName(widget.widget, [window.page, widget.id]);
+                }
                 //console.log(` Widget: Type - ${widget.widget}, ID - ${widget.id}`);
             }
             //await pushToAllPositions();

@@ -115,7 +115,7 @@ async function textField(page: string, id: string): Promise<void> {
 
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id;
+        let name = page + ":" + id + ":var:";
 
         const textVar = figma.variables.createVariable(name, collection.id, "STRING");
 
@@ -146,6 +146,8 @@ async function textField(page: string, id: string): Promise<void> {
             await setTextOfInstance(newInstance, id);
         }
     }
+
+    newComponent.remove();
 }
 
 async function searchBox(page: string, id: string): Promise<void> {
@@ -178,7 +180,7 @@ async function searchBox(page: string, id: string): Promise<void> {
 
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id;
+        let name = page + ":" + id + ":var:";
 
         const textVar = figma.variables.createVariable(name, collection.id, "STRING");
 
@@ -207,6 +209,8 @@ async function searchBox(page: string, id: string): Promise<void> {
             //newInstance.reactions = reactions;
         }
     }
+
+    newComponent.remove();
 }
 
 
@@ -278,6 +282,99 @@ async function icon(page: string, id: string): Promise<void> {
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 }
 
+async function fieldSet(page: string, id: string, widgets: any[]): Promise<void> {
+    console.log("fieldset:")
+    console.log(widgets);
+}
+
+async function dropDownList(page: string, id: string, widgets: any[]): Promise<void> {
+    const component = findComponentSetByName("InteractionDropdown");
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    if (!component) {
+        return;
+    }
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 0;
+    newComponent.y = 0;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let openVariant = null;
+    for (const variant of newComponent.children) {
+        if (variant.name === "Type=Open" && "children" in variant) {
+            openVariant = variant;
+        }
+    }
+
+    if (openVariant && "children" in openVariant) {
+        const containerVariant = openVariant as FrameNode | GroupNode | ComponentNode | InstanceNode;
+
+        const textInputChild = containerVariant.children.find(child => child.name === "Text Input");
+
+
+        if (textInputChild && "children" in textInputChild) {
+            const MenuItem = textInputChild.children.find(child => child.name === ".Menu item Dropdown");
+
+            let i = 0;
+
+            for (const widget of widgets) {
+                if (i == 0) {
+                    if (MenuItem && "children" in MenuItem) {
+                        const textChild = MenuItem.children.find(child => child.type === "TEXT") as TextNode;
+
+                        if (textChild) {
+                            textChild.characters = widget.id;
+                        }
+                    }
+                    i++
+                    continue
+                }
+                const newMenu = MenuItem?.clone();
+
+                if (newMenu && "children" in newMenu) {
+                    textInputChild.appendChild(newMenu);
+
+                    const textChild = newMenu.children.find(child => child.type === "TEXT") as TextNode;
+
+                    if (textChild) {
+                        textChild.characters = widget.id;
+                    }
+                }
+            }
+        }
+    }
+
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+
+
+
+    if (newInstance) {
+        await setTextOfInstance(newInstance, id);
+    }
+}
+
+async function listBox(page: string, id: string, widgets: any[]): Promise<void> {
+    const component = findComponentSetByName("InteractionListBox");
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        await setTextOfInstance(newInstance, id);
+    }
+}
+
+async function menu(page: string, id: string, widgets: any[]): Promise<void> {
+    const component = findComponentSetByName("InteractionMenu");
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+}
+
 const functionMap: FunctionMap = {
     "Button": button,
     "BrowserWindow": browserWindow,
@@ -289,7 +386,11 @@ const functionMap: FunctionMap = {
     "Image": image,
     "Calendar": calendar,
     "TimePicker": timePicker,
-    "Icon": icon
+    "Icon": icon,
+    "FieldSet": fieldSet,
+    "DropdownList": dropDownList,
+    "ListBox": listBox,
+    "Menu": menu
 
 };
 
@@ -306,6 +407,10 @@ export async function callFunctionByName(functionName: string, params: any[] = [
 
 function findComponentSetByName(name: string): ComponentSetNode | null {
     return figma.root.findOne(node => node.type === "COMPONENT_SET" && node.name === name) as ComponentSetNode | null;
+}
+
+function findComponentByName(name: string): ComponentNode | null {
+    return figma.root.findOne(node => node.type === "COMPONENT" && node.name === name) as ComponentNode | null;
 }
 
 function findFrameByName(name: string): FrameNode | null {
@@ -431,10 +536,9 @@ function clone(val: any) {
 }
 
 function getTypingReactions(id: string, startString: string, reactions: any) {
-    // Loop through lowercase letters 'a' to 'z'
     for (let i = 0; i < 26; i++) {
-        const letter = String.fromCharCode(97 + i); // Convert i to corresponding letter
-        const keyCode = 65 + i; // Adjust the keycode starting from 65 for 'a'
+        const letter = String.fromCharCode(97 + i);
+        const keyCode = 65 + i;
 
         const reaction = {
             "action": {
@@ -446,7 +550,7 @@ function getTypingReactions(id: string, startString: string, reactions: any) {
                                 "type": "SET_VARIABLE",
                                 "variableId": id,
                                 "variableValue": {
-                                    "value": letter, // Use the current letter
+                                    "value": letter,
                                     "type": "STRING",
                                     "resolvedType": "STRING"
                                 }
@@ -624,4 +728,8 @@ function getTypingReactions(id: string, startString: string, reactions: any) {
     reactions.push(reaction);
 
     return reactions;
+}
+
+function goToPage() {
+
 }
