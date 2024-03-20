@@ -15,6 +15,7 @@ let modeId: string;
 const startOffset = { x: 50, y: 200 }; // Starting position for the first instance
 const gridSpacing = { x: 20, y: 20 }; // Spacing between instances
 const frameSize = { x: 1200, y: 900 };
+let framePos = { x: 0, y: 0 };
 let allPositions: Position[] = [];
 
 async function button(page: string, id: string): Promise<void> {
@@ -36,6 +37,8 @@ async function browserWindow(id: string, first: boolean): Promise<void> {
     if (first) {
         collection = figma.variables.createVariableCollection("new-collection")
         modeId = collection.modes[0].modeId
+        framePos.x = 0;
+        framePos.y = 0;
     }
 
     try {
@@ -44,8 +47,9 @@ async function browserWindow(id: string, first: boolean): Promise<void> {
         frame.resize(frameSize.x, frameSize.y);
         const maxX = 1000;
         const maxY = 1000;
-        frame.x = Math.floor(Math.random() * maxX);
-        frame.y = Math.floor(Math.random() * maxY);
+        frame.x = framePos.x + frameSize.x * 1.25;
+        frame.y = framePos.y;
+        framePos.x = frame.x;
         figma.currentPage.appendChild(frame);
 
         const textNode = figma.createText();
