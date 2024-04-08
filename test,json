@@ -1,0 +1,181 @@
+[
+    {
+        "action": {
+            "type": "CONDITIONAL",
+            "conditionalBlocks": [
+                {
+                    "actions": [
+                        {
+                            "type": "SET_VARIABLE",
+                            "variableId": "VariableID:138:1706",
+                            "variableValue": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": "VariableID:138:1706"
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "FLOAT"
+                                        },
+                                        {
+                                            "value": 1,
+                                            "type": "FLOAT",
+                                            "resolvedType": "FLOAT"
+                                        }
+                                    ],
+                                    "expressionFunction": "ADDITION"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "FLOAT"
+                            }
+                        },
+                        {
+                            "type": "SET_VARIABLE",
+                            "variableId": "VariableID:2004:2198",
+                            "variableValue": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": "",
+                                            "type": "STRING",
+                                            "resolvedType": "STRING"
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": "VariableID:138:1706"
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "FLOAT"
+                                        }
+                                    ],
+                                    "expressionFunction": "ADDITION"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "STRING"
+                            }
+                        }
+                    ],
+                    "condition": {
+                        "value": {
+                            "expressionArguments": [
+                                {
+                                    "value": {
+                                        "type": "VARIABLE_ALIAS",
+                                        "id": "VariableID:138:1706"
+                                    },
+                                    "type": "VARIABLE_ALIAS",
+                                    "resolvedType": "FLOAT"
+                                },
+                                {
+                                    "value": 999,
+                                    "type": "FLOAT",
+                                    "resolvedType": "FLOAT"
+                                }
+                            ],
+                            "expressionFunction": "LESS_THAN"
+                        },
+                        "type": "EXPRESSION",
+                        "resolvedType": "BOOLEAN"
+                    }
+                },
+                {
+                    "actions": []
+                }
+            ]
+        },
+        "actions": [
+            {
+                "type": "CONDITIONAL",
+                "conditionalBlocks": [
+                    {
+                        "actions": [
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": "VariableID:138:1706",
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": "VariableID:138:1706"
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "FLOAT"
+                                            },
+                                            {
+                                                "value": 1,
+                                                "type": "FLOAT",
+                                                "resolvedType": "FLOAT"
+                                            }
+                                        ],
+                                        "expressionFunction": "ADDITION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "FLOAT"
+                                }
+                            },
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": "VariableID:2004:2198",
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": "",
+                                                "type": "STRING",
+                                                "resolvedType": "STRING"
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": "VariableID:138:1706"
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "FLOAT"
+                                            }
+                                        ],
+                                        "expressionFunction": "ADDITION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "STRING"
+                                }
+                            }
+                        ],
+                        "condition": {
+                            "value": {
+                                "expressionArguments": [
+                                    {
+                                        "value": {
+                                            "type": "VARIABLE_ALIAS",
+                                            "id": "VariableID:138:1706"
+                                        },
+                                        "type": "VARIABLE_ALIAS",
+                                        "resolvedType": "FLOAT"
+                                    },
+                                    {
+                                        "value": 999,
+                                        "type": "FLOAT",
+                                        "resolvedType": "FLOAT"
+                                    }
+                                ],
+                                "expressionFunction": "LESS_THAN"
+                            },
+                            "type": "EXPRESSION",
+                            "resolvedType": "BOOLEAN"
+                        }
+                    },
+                    {
+                        "actions": []
+                    }
+                ]
+            }
+        ],
+        "trigger": {
+            "type": "ON_CLICK"
+        }
+    }
+]

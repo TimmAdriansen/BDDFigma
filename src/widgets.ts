@@ -190,7 +190,6 @@ async function searchBox(page: string, id: string): Promise<void> {
 
         let startString = "Search here";
 
-        // Assuming getTypingReactions is a function that you have that configures reactions based on the text variable
         reactions = getTypingReactions(textVar.id, startString, reactions);
 
         specificVariant.reactions = reactions;
@@ -287,8 +286,8 @@ async function icon(page: string, id: string): Promise<void> {
 }
 
 async function fieldSet(page: string, id: string, widgets: any[]): Promise<void> {
-    console.log("fieldset:")
-    console.log(widgets);
+    //console.log("fieldset:")
+    //console.log(widgets);
 }
 
 async function dropDownList(page: string, id: string, widgets: any[]): Promise<void> {
@@ -513,7 +512,7 @@ async function menu(page: string, id: string, widgets: any[]): Promise<void> {
         const containerVariant = newComponent.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
         if (containerVariant && "children" in containerVariant) {
             const yeet = containerVariant.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
-            
+
             let secondFrame: FrameNode | null = findFrameByName("New Window");
             if (secondFrame) {
                 let reactions = clone(yeet.reactions);
@@ -531,6 +530,87 @@ async function menu(page: string, id: string, widgets: any[]): Promise<void> {
     }
 }
 
+async function accordion(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionAccordion");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+}
+
+async function breadcrumb(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionBreadcrumb");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+}
+
+async function numericStepper(page: string, id: string): Promise<void> {
+    const component = findComponentSetByName("InteractionNumericStepper");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    if (!component) {
+        return;
+    }
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let defaultVariant = null;
+    for (const variant of newComponent.children) {
+        if (variant.name === "Property 1=Default" && "children" in variant) {
+            defaultVariant = variant;
+        }
+    }
+
+    let nameFloat = page + ":" + id + ":var:" + "float";
+
+    const floatVar = figma.variables.createVariable(nameFloat, collection.id, "FLOAT");
+
+    let nameString = page + ":" + id + ":var:" + "string";
+
+    const stringVar = figma.variables.createVariable(nameString, collection.id, "STRING");
+
+
+    if (defaultVariant) {
+        const minusButton = defaultVariant.children.find(child => child.name === "MinusButton");
+        if (minusButton && ("reactions" in minusButton)) {
+            let reactions = clone(minusButton.reactions);
+            reactions = numericStepperMinusReaction(floatVar.id, stringVar.id, reactions);
+            minusButton.reactions = reactions;
+        }
+        const plusButton = defaultVariant.children.find(child => child.name === "PlusButton");
+        if (plusButton && ("reactions" in plusButton)) {
+            let reactions = clone(plusButton.reactions);
+            console.log(reactions);
+            reactions = numericStepperPlusReaction(floatVar.id, stringVar.id, reactions);
+            plusButton.reactions = reactions;
+        }
+    }
+
+
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        const textNode = newInstance.findOne(child => child.name === 'value' && child.type === 'TEXT') as TextNode;
+        console.log(textNode);
+
+        if (textNode) {
+            stringVar.setValueForMode(modeId, "0");
+            textNode.setBoundVariable('characters', stringVar.id);
+        }
+    }
+
+    newComponent.remove();
+}
+
 const functionMap: FunctionMap = {
     "Button": button,
     "BrowserWindow": browserWindow,
@@ -546,7 +626,10 @@ const functionMap: FunctionMap = {
     "FieldSet": fieldSet,
     "DropdownList": dropDownList,
     "ListBox": listBox,
-    "Menu": menu
+    "Menu": menu,
+    "Accordion": accordion,
+    "Breadcrumb": breadcrumb,
+    "NumericStepper": numericStepper
 
 };
 
@@ -915,6 +998,379 @@ function goToPage(reactions: any, pageID: string) {
                     "duration": 0.30000001192092896
                 },
                 "resetVideoPosition": false
+            }
+        ],
+        "trigger": {
+            "type": "ON_CLICK"
+        }
+    }
+
+    reactions.push(reaction);
+    return reactions;
+}
+
+function numericStepperMinusReaction(idFloat: string, idString: string, reactions: any) {
+    console.log(idFloat);
+    console.log(idString);
+    const reaction =
+    {
+        "action": {
+            "type": "CONDITIONAL",
+            "conditionalBlocks": [
+                {
+                    "actions": [
+                        {
+                            "type": "SET_VARIABLE",
+                            "variableId": idFloat,
+                            "variableValue": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": idFloat
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "FLOAT"
+                                        },
+                                        {
+                                            "value": 1,
+                                            "type": "FLOAT",
+                                            "resolvedType": "FLOAT"
+                                        }
+                                    ],
+                                    "expressionFunction": "SUBTRACTION"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "FLOAT"
+                            }
+                        },
+                        {
+                            "type": "SET_VARIABLE",
+                            "variableId": idString,
+                            "variableValue": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": "",
+                                            "type": "STRING",
+                                            "resolvedType": "STRING"
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": idFloat
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "FLOAT"
+                                        }
+                                    ],
+                                    "expressionFunction": "ADDITION"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "STRING"
+                            }
+                        }
+                    ],
+                    "condition": {
+                        "value": {
+                            "expressionArguments": [
+                                {
+                                    "value": {
+                                        "type": "VARIABLE_ALIAS",
+                                        "id": idFloat
+                                    },
+                                    "type": "VARIABLE_ALIAS",
+                                    "resolvedType": "FLOAT"
+                                },
+                                {
+                                    "value": 0,
+                                    "type": "FLOAT",
+                                    "resolvedType": "FLOAT"
+                                }
+                            ],
+                            "expressionFunction": "GREATER_THAN"
+                        },
+                        "type": "EXPRESSION",
+                        "resolvedType": "BOOLEAN"
+                    }
+                },
+                {
+                    "actions": []
+                }
+            ]
+        },
+        "actions": [
+            {
+                "type": "CONDITIONAL",
+                "conditionalBlocks": [
+                    {
+                        "actions": [
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": idFloat,
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": idFloat
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "FLOAT"
+                                            },
+                                            {
+                                                "value": 1,
+                                                "type": "FLOAT",
+                                                "resolvedType": "FLOAT"
+                                            }
+                                        ],
+                                        "expressionFunction": "SUBTRACTION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "FLOAT"
+                                }
+                            },
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": idString,
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": "",
+                                                "type": "STRING",
+                                                "resolvedType": "STRING"
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": idFloat
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "FLOAT"
+                                            }
+                                        ],
+                                        "expressionFunction": "ADDITION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "STRING"
+                                }
+                            }
+                        ],
+                        "condition": {
+                            "value": {
+                                "expressionArguments": [
+                                    {
+                                        "value": {
+                                            "type": "VARIABLE_ALIAS",
+                                            "id": idFloat
+                                        },
+                                        "type": "VARIABLE_ALIAS",
+                                        "resolvedType": "FLOAT"
+                                    },
+                                    {
+                                        "value": 0,
+                                        "type": "FLOAT",
+                                        "resolvedType": "FLOAT"
+                                    }
+                                ],
+                                "expressionFunction": "GREATER_THAN"
+                            },
+                            "type": "EXPRESSION",
+                            "resolvedType": "BOOLEAN"
+                        }
+                    },
+                    {
+                        "actions": []
+                    }
+                ]
+            }
+        ],
+        "trigger": {
+            "type": "ON_CLICK"
+        }
+    }
+
+    reactions.push(reaction);
+    return reactions;
+}
+
+function numericStepperPlusReaction(idFloat: string, idString: string, reactions: any){
+    const reaction = {
+        "action": {
+            "type": "CONDITIONAL",
+            "conditionalBlocks": [
+                {
+                    "actions": [
+                        {
+                            "type": "SET_VARIABLE",
+                            "variableId": idFloat,
+                            "variableValue": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": idFloat
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "FLOAT"
+                                        },
+                                        {
+                                            "value": 1,
+                                            "type": "FLOAT",
+                                            "resolvedType": "FLOAT"
+                                        }
+                                    ],
+                                    "expressionFunction": "ADDITION"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "FLOAT"
+                            }
+                        },
+                        {
+                            "type": "SET_VARIABLE",
+                            "variableId": idString,
+                            "variableValue": {
+                                "value": {
+                                    "expressionArguments": [
+                                        {
+                                            "value": "",
+                                            "type": "STRING",
+                                            "resolvedType": "STRING"
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "VARIABLE_ALIAS",
+                                                "id": idFloat
+                                            },
+                                            "type": "VARIABLE_ALIAS",
+                                            "resolvedType": "FLOAT"
+                                        }
+                                    ],
+                                    "expressionFunction": "ADDITION"
+                                },
+                                "type": "EXPRESSION",
+                                "resolvedType": "STRING"
+                            }
+                        }
+                    ],
+                    "condition": {
+                        "value": {
+                            "expressionArguments": [
+                                {
+                                    "value": {
+                                        "type": "VARIABLE_ALIAS",
+                                        "id": idFloat
+                                    },
+                                    "type": "VARIABLE_ALIAS",
+                                    "resolvedType": "FLOAT"
+                                },
+                                {
+                                    "value": 999,
+                                    "type": "FLOAT",
+                                    "resolvedType": "FLOAT"
+                                }
+                            ],
+                            "expressionFunction": "LESS_THAN"
+                        },
+                        "type": "EXPRESSION",
+                        "resolvedType": "BOOLEAN"
+                    }
+                },
+                {
+                    "actions": []
+                }
+            ]
+        },
+        "actions": [
+            {
+                "type": "CONDITIONAL",
+                "conditionalBlocks": [
+                    {
+                        "actions": [
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": idFloat,
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": idFloat
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "FLOAT"
+                                            },
+                                            {
+                                                "value": 1,
+                                                "type": "FLOAT",
+                                                "resolvedType": "FLOAT"
+                                            }
+                                        ],
+                                        "expressionFunction": "ADDITION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "FLOAT"
+                                }
+                            },
+                            {
+                                "type": "SET_VARIABLE",
+                                "variableId": idString,
+                                "variableValue": {
+                                    "value": {
+                                        "expressionArguments": [
+                                            {
+                                                "value": "",
+                                                "type": "STRING",
+                                                "resolvedType": "STRING"
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "VARIABLE_ALIAS",
+                                                    "id": idFloat
+                                                },
+                                                "type": "VARIABLE_ALIAS",
+                                                "resolvedType": "FLOAT"
+                                            }
+                                        ],
+                                        "expressionFunction": "ADDITION"
+                                    },
+                                    "type": "EXPRESSION",
+                                    "resolvedType": "STRING"
+                                }
+                            }
+                        ],
+                        "condition": {
+                            "value": {
+                                "expressionArguments": [
+                                    {
+                                        "value": {
+                                            "type": "VARIABLE_ALIAS",
+                                            "id": idFloat
+                                        },
+                                        "type": "VARIABLE_ALIAS",
+                                        "resolvedType": "FLOAT"
+                                    },
+                                    {
+                                        "value": 999,
+                                        "type": "FLOAT",
+                                        "resolvedType": "FLOAT"
+                                    }
+                                ],
+                                "expressionFunction": "LESS_THAN"
+                            },
+                            "type": "EXPRESSION",
+                            "resolvedType": "BOOLEAN"
+                        }
+                    },
+                    {
+                        "actions": []
+                    }
+                ]
             }
         ],
         "trigger": {

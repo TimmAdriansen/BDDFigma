@@ -41,7 +41,7 @@ async function loopData(data: string): Promise<void> {
         //console.log("Switched to page: " + targetPageName);
     }
 
-    console.log(figma.currentPage.children);
+    //console.log(figma.currentPage.children);
 
     for (const node of figma.currentPage.children) {
         // Check if the node is a frame, component, or instance
