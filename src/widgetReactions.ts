@@ -196,8 +196,6 @@ export class WidgetReactions {
     }
 
     numericStepperMinusReaction(idFloat: string, idString: string, reactions: any) {
-        console.log(idFloat);
-        console.log(idString);
         const reaction =
         {
             "action": {

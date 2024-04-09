@@ -516,14 +516,42 @@ async function menu(page: string, id: string, widgets: any[]): Promise<void> {
 
         const containerVariant = newComponent.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
         if (containerVariant && "children" in containerVariant) {
-            const yeet = containerVariant.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+            const menuItem = containerVariant.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
 
-            let secondFrame: FrameNode | null = findFrameByName("New Window");
+            let i = 0;
+
+            for (const widget of widgets) {
+                if (i == 0) {
+                    const child = menuItem.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+                    const textChild = child.children.find(child => child.type === "TEXT") as TextNode;
+
+                    if (textChild) {
+                        //console.log("CHILD");
+                        textChild.characters = widget.id;
+                    }
+                    i++
+                    continue
+                }
+
+                const newMenu = menuItem?.clone();
+                containerVariant.appendChild(newMenu);
+
+                const child = newMenu.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+                const textChild = child.children.find(child => child.type === "TEXT") as TextNode;
+
+                if (textChild) {
+                    textChild.characters = widget.id;
+                }
+
+            }
+
+            //example of using go to page
+            /*let secondFrame: FrameNode | null = findFrameByName("New Window");
             if (secondFrame) {
                 let reactions = clone(yeet.reactions);
                 reactions = widgetStateReactions.goToPage(reactions, secondFrame.id)
                 yeet.reactions = reactions;
-            }
+            }*/
         }
 
     }
@@ -533,6 +561,8 @@ async function menu(page: string, id: string, widgets: any[]): Promise<void> {
 
     if (newInstance) {
     }
+
+    newComponent.remove();
 }
 
 async function accordion(page: string, id: string): Promise<void> {
@@ -594,7 +624,7 @@ async function numericStepper(page: string, id: string): Promise<void> {
         const plusButton = defaultVariant.children.find(child => child.name === "PlusButton");
         if (plusButton && ("reactions" in plusButton)) {
             let reactions = clone(plusButton.reactions);
-            console.log(reactions);
+            //console.log(reactions);
             reactions = widgetReactions.numericStepperPlusReaction(floatVar.id, stringVar.id, reactions);
             plusButton.reactions = reactions;
         }
@@ -605,7 +635,7 @@ async function numericStepper(page: string, id: string): Promise<void> {
 
     if (newInstance) {
         const textNode = newInstance.findOne(child => child.name === 'value' && child.type === 'TEXT') as TextNode;
-        console.log(textNode);
+        //console.log(textNode);
 
         if (textNode) {
             stringVar.setValueForMode(modeId, "0");
