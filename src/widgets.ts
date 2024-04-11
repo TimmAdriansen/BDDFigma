@@ -23,7 +23,7 @@ const frameSize = { x: 1200, y: 900 };
 let framePos = { x: 0, y: 0 };
 let allPositions: Position[] = [];
 
-let container = false
+let containerID: string | null = null;
 
 async function button(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionButton");
@@ -339,7 +339,8 @@ async function icon(page: string, id: string): Promise<InstanceNode | null> {
 async function fieldSet(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionFieldSet");
     let currentFrame: FrameNode | null = findFrameByName(page);
-    container = true;
+    
+    if(currentFrame) containerID = currentFrame.name + ":" + id;
 
     if (!component) {
         return null;
@@ -365,9 +366,12 @@ async function fieldSet(page: string, id: string, widgets: any[]): Promise<Insta
             }
         }
 
-        container = false;
+        containerID = null;
 
         const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+
+        newComponent.remove();
+
         return newInstance;
     }
 
@@ -883,7 +887,7 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
 
     const instance = componentToInstantiate.createInstance();
 
-    if (!container) {
+    if (!containerID) {
         instance.name = targetFrame.name + ":" + id;
         instance.x = startOffset.x;
         instance.y = startOffset.y;
@@ -896,6 +900,8 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
         });
 
         targetFrame.appendChild(instance);
+    } else{
+        instance.name = containerID + ":" + id;
     }
 
     return instance;
