@@ -1,181 +1,301 @@
-[
-    {
-        "action": {
-            "type": "CONDITIONAL",
-            "conditionalBlocks": [
+{
+    "BrowserWindows": [
+        {
+            "page": "Availability Page",
+            "widgets": [
                 {
-                    "actions": [
-                        {
-                            "type": "SET_VARIABLE",
-                            "variableId": "VariableID:138:1706",
-                            "variableValue": {
-                                "value": {
-                                    "expressionArguments": [
-                                        {
-                                            "value": {
-                                                "type": "VARIABLE_ALIAS",
-                                                "id": "VariableID:138:1706"
-                                            },
-                                            "type": "VARIABLE_ALIAS",
-                                            "resolvedType": "FLOAT"
-                                        },
-                                        {
-                                            "value": 1,
-                                            "type": "FLOAT",
-                                            "resolvedType": "FLOAT"
-                                        }
-                                    ],
-                                    "expressionFunction": "ADDITION"
-                                },
-                                "type": "EXPRESSION",
-                                "resolvedType": "FLOAT"
-                            }
-                        },
-                        {
-                            "type": "SET_VARIABLE",
-                            "variableId": "VariableID:2004:2198",
-                            "variableValue": {
-                                "value": {
-                                    "expressionArguments": [
-                                        {
-                                            "value": "",
-                                            "type": "STRING",
-                                            "resolvedType": "STRING"
-                                        },
-                                        {
-                                            "value": {
-                                                "type": "VARIABLE_ALIAS",
-                                                "id": "VariableID:138:1706"
-                                            },
-                                            "type": "VARIABLE_ALIAS",
-                                            "resolvedType": "FLOAT"
-                                        }
-                                    ],
-                                    "expressionFunction": "ADDITION"
-                                },
-                                "type": "EXPRESSION",
-                                "resolvedType": "STRING"
-                            }
-                        }
-                    ],
-                    "condition": {
-                        "value": {
-                            "expressionArguments": [
-                                {
-                                    "value": {
-                                        "type": "VARIABLE_ALIAS",
-                                        "id": "VariableID:138:1706"
-                                    },
-                                    "type": "VARIABLE_ALIAS",
-                                    "resolvedType": "FLOAT"
-                                },
-                                {
-                                    "value": 999,
-                                    "type": "FLOAT",
-                                    "resolvedType": "FLOAT"
-                                }
-                            ],
-                            "expressionFunction": "LESS_THAN"
-                        },
-                        "type": "EXPRESSION",
-                        "resolvedType": "BOOLEAN"
-                    }
+                    "widget": "Button",
+                    "id": "No Bag"
                 },
                 {
-                    "actions": []
+                    "widget": "TextField",
+                    "id": "neewTextFields"
+                },
+                {
+                    "widget": "SearchBox",
+                    "id": "neewTextFieldes"
+                },
+                {
+                    "widget": "Button",
+                    "id": "Book"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newReqwadio"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "newBoqwex"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newRadio"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "newBqewoxeqw2"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newqweRadio2"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "newBox3qew"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "radio"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "checkbox"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "I agree to the terms and conditions"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newRadio3"
+                },
+                {
+                    "widget": "ToggleButton",
+                    "id": "jes"
                 }
             ]
         },
-        "actions": [
-            {
-                "type": "CONDITIONAL",
-                "conditionalBlocks": [
-                    {
-                        "actions": [
-                            {
-                                "type": "SET_VARIABLE",
-                                "variableId": "VariableID:138:1706",
-                                "variableValue": {
-                                    "value": {
-                                        "expressionArguments": [
-                                            {
-                                                "value": {
-                                                    "type": "VARIABLE_ALIAS",
-                                                    "id": "VariableID:138:1706"
-                                                },
-                                                "type": "VARIABLE_ALIAS",
-                                                "resolvedType": "FLOAT"
-                                            },
-                                            {
-                                                "value": 1,
-                                                "type": "FLOAT",
-                                                "resolvedType": "FLOAT"
-                                            }
-                                        ],
-                                        "expressionFunction": "ADDITION"
-                                    },
-                                    "type": "EXPRESSION",
-                                    "resolvedType": "FLOAT"
-                                }
-                            },
-                            {
-                                "type": "SET_VARIABLE",
-                                "variableId": "VariableID:2004:2198",
-                                "variableValue": {
-                                    "value": {
-                                        "expressionArguments": [
-                                            {
-                                                "value": "",
-                                                "type": "STRING",
-                                                "resolvedType": "STRING"
-                                            },
-                                            {
-                                                "value": {
-                                                    "type": "VARIABLE_ALIAS",
-                                                    "id": "VariableID:138:1706"
-                                                },
-                                                "type": "VARIABLE_ALIAS",
-                                                "resolvedType": "FLOAT"
-                                            }
-                                        ],
-                                        "expressionFunction": "ADDITION"
-                                    },
-                                    "type": "EXPRESSION",
-                                    "resolvedType": "STRING"
-                                }
-                            }
-                        ],
-                        "condition": {
-                            "value": {
-                                "expressionArguments": [
-                                    {
-                                        "value": {
-                                            "type": "VARIABLE_ALIAS",
-                                            "id": "VariableID:138:1706"
-                                        },
-                                        "type": "VARIABLE_ALIAS",
-                                        "resolvedType": "FLOAT"
-                                    },
-                                    {
-                                        "value": 999,
-                                        "type": "FLOAT",
-                                        "resolvedType": "FLOAT"
-                                    }
-                                ],
-                                "expressionFunction": "LESS_THAN"
-                            },
-                            "type": "EXPRESSION",
-                            "resolvedType": "BOOLEAN"
+        {
+            "page": "accept",
+            "widgets": [
+                {
+                    "widget": "CheckBox",
+                    "id": "ene"
+                },
+                {
+                    "widget": "Calendar",
+                    "id": "calendar"
+                },
+                {
+                    "widget": "TimePicker",
+                    "id": "yeet"
+                },
+                {
+                    "widget": "Icon",
+                    "id": "icon"
+                },
+                {
+                    "widget": "TextField",
+                    "id": "Balance"
+                }
+            ]
+        },
+        {
+            "page": "New Window",
+            "widgets": [
+                {
+                    "widget": "Button",
+                    "id": "No Bqewag"
+                },
+                {
+                    "widget": "TextField",
+                    "id": "newTeqextFields"
+                },
+                {
+                    "widget": "Button",
+                    "id": "Bookqwqwee"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newRadio"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "newBoqwqweex"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newRaqwedio"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "newBoqwex2"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "newRqweadio2"
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "qwqewe"
+                },
+                {
+                    "widget": "RadioButton",
+                    "id": "asdas"
+                },
+                {
+                    "widget": "Button",
+                    "id": "button"
+                },
+                {
+                    "widget": "Button",
+                    "id": "buttons"
+                },
+                {
+                    "widget": "Image",
+                    "id": "image"
+                }
+            ]
+        },
+        {
+            "page": "Account Balance",
+            "widgets": [
+                {
+                    "widget": "FieldSet",
+                    "id": "field",
+                    "widgets": [
+                        {
+                            "widget": "CheckBox",
+                            "id": "qwBox"
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "qwBo123x"
                         }
-                    },
-                    {
-                        "actions": []
-                    }
-                ]
-            }
-        ],
-        "trigger": {
-            "type": "ON_CLICK"
+                    ]
+                },
+                {
+                    "widget": "Menu",
+                    "id": "Menu",
+                    "widgets": [
+                        {
+                            "widget": "MenuItem",
+                            "id": "qwBox2"
+                        },
+                        {
+                            "widget": "MenuItem",
+                            "id": "qwBox1"
+                        }
+                    ]
+                },
+                {
+                    "widget": "ListBox",
+                    "id": "Ke",
+                    "widgets": [
+                        {
+                            "widget": "CheckBox",
+                            "id": "qwBox3"
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "qwBox4"
+                        }
+                    ]
+                },
+                {
+                    "widget": "DropdownList",
+                    "id": "kes",
+                    "widgets": [
+                        {
+                            "widget": "Button",
+                            "id": "qwBox4"
+                        },
+                        {
+                            "widget": "Button",
+                            "id": "qwBox5"
+                        }
+                    ]
+                },
+                {
+                    "widget": "DropdownList",
+                    "id": "kes2",
+                    "widgets": [
+                        {
+                            "widget": "Button",
+                            "id": "qwBox6"
+                        },
+                        {
+                            "widget": "Button",
+                            "id": "qwBox7"
+                        }
+                    ]
+                },
+                {
+                    "widget": "CheckBox",
+                    "id": "Box"
+                }
+            ]
+        },
+        {
+            "page": "Yes Sir",
+            "widgets": [
+                {
+                    "widget": "Accordion",
+                    "id": "Info"
+                },
+                {
+                    "widget": "Menu",
+                    "id": "Menu",
+                    "widgets": [
+                        {
+                            "widget": "MenuItem",
+                            "id": "qwBox2"
+                        },
+                        {
+                            "widget": "MenuItem",
+                            "id": "qwBox1"
+                        }
+                    ]
+                },
+                {
+                    "widget": "Breadcrumb",
+                    "id": "Breadcrumb"
+                },
+                {
+                    "widget": "NumericStepper",
+                    "id": "NumStep"
+                },
+                {
+                    "widget": "NumericStepper",
+                    "id": "NumStep2"
+                }
+            ]
+        },
+        {
+            "page": "Fieldset example",
+            "widgets": [
+                {
+                    "widget": "FieldSet",
+                    "id": "FieldSet",
+                    "widgets": [
+                        {
+                            "widget": "Text",
+                            "id": "FieldSetTitle"
+                        },
+                        {
+                            "widget": "Button",
+                            "id": "button2hj"
+                        },
+                        {
+                            "widget": "Button",
+                            "id": "button"
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "CheckBox"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "page": "Duplicate ID test",
+            "widgets": [
+                {
+                    "widget": "Button",
+                    "id": "button"
+                }
+            ]
         }
-    }
-]
+    ]
+}

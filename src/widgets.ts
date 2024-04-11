@@ -4,7 +4,7 @@ let widgetReactions = new WidgetReactions();
 let widgetStateReactions = new WidgetStateReactions();
 
 type FunctionMap = {
-    [key: string]: (...args: any[]) => void;
+    [key: string]: (...args: any[]) => Promise<InstanceNode | null>;
 };
 
 interface Position {
@@ -23,7 +23,9 @@ const frameSize = { x: 1200, y: 900 };
 let framePos = { x: 0, y: 0 };
 let allPositions: Position[] = [];
 
-async function button(page: string, id: string): Promise<void> {
+let container = false
+
+async function button(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionButton");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
@@ -34,9 +36,11 @@ async function button(page: string, id: string): Promise<void> {
         await setTextOfInstance(newInstance, id);
     }
 
+    return newInstance;
+
 }
 
-async function browserWindow(id: string, first: boolean): Promise<void> {
+async function browserWindow(id: string, first: boolean): Promise<InstanceNode | null> {
     //resetPositionsArray(id);
 
     if (first) {
@@ -92,15 +96,16 @@ async function browserWindow(id: string, first: boolean): Promise<void> {
         }
     }
 
+    return null;
 }
 
-async function textField(page: string, id: string): Promise<void> {
+async function textField(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionInputField");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     if (!component) {
-        return;
+        return null;
     }
 
     let newComponent = component.clone()
@@ -154,18 +159,21 @@ async function textField(page: string, id: string): Promise<void> {
 
             await setTextOfInstance(newInstance, id);
         }
-    }
 
-    newComponent.remove();
+        newComponent.remove();
+
+        return newInstance;
+    }
+    return null;
 }
 
-async function searchBox(page: string, id: string): Promise<void> {
+async function searchBox(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionSearchField");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     if (!component) {
-        return;
+        return null;
     }
 
     let newComponent = component.clone()
@@ -216,13 +224,17 @@ async function searchBox(page: string, id: string): Promise<void> {
 
             //newInstance.reactions = reactions;
         }
+
+        newComponent.remove();
+
+        return newInstance;
     }
 
-    newComponent.remove();
+    return null;
 }
 
 
-async function radioButton(page: string, id: string): Promise<void> {
+async function radioButton(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionRadioButton");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
@@ -231,10 +243,14 @@ async function radioButton(page: string, id: string): Promise<void> {
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
+
+        return newInstance;
     }
+
+    return null;
 }
 
-async function toggleButton(page: string, id: string): Promise<void> {
+async function toggleButton(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionToggle");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
@@ -243,10 +259,13 @@ async function toggleButton(page: string, id: string): Promise<void> {
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
+        return newInstance;
     }
+
+    return null;
 }
 
-async function checkBox(page: string, id: string): Promise<void> {
+async function checkBox(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionCheckbox");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
@@ -255,52 +274,113 @@ async function checkBox(page: string, id: string): Promise<void> {
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
+        return newInstance;
     }
+
+    return null;
 }
 
-async function image(page: string, id: string): Promise<void> {
+async function image(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionImage");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance
+    }
+
+    return null;
 }
 
-async function calendar(page: string, id: string): Promise<void> {
+async function calendar(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionCalendar");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance
+    }
+
+    return null;
 }
 
-async function timePicker(page: string, id: string): Promise<void> {
+async function timePicker(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionTimePicker");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance
+    }
+
+    return null;
 }
 
-async function icon(page: string, id: string): Promise<void> {
+async function icon(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionIconButton");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance
+    }
+
+    return null;
 }
 
-async function fieldSet(page: string, id: string, widgets: any[]): Promise<void> {
-    //console.log("fieldset:")
-    //console.log(widgets);
+async function fieldSet(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionFieldSet");
+    let currentFrame: FrameNode | null = findFrameByName(page);
+    container = true;
+
+    if (!component) {
+        return null;
+    }
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    if (newComponent && "children" in newComponent) {
+
+        const containerVariant = newComponent.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+
+        //foreach widget append instance
+        for (const widget of widgets) {
+            let instance = await callFunctionByName(widget.widget, [page, widget.id])
+            if (instance) {
+                containerVariant.appendChild(instance);
+            }
+        }
+
+        container = false;
+
+        const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+        return newInstance;
+    }
+
+    return null;
+
 }
 
-async function dropDownList(page: string, id: string, widgets: any[]): Promise<void> {
+async function dropDownList(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionDropdown");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     if (!component) {
-        return;
+        return null;
     }
 
     let newComponent = component.clone()
@@ -418,17 +498,21 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<v
             textNode.setBoundVariable('characters', textVar.id);
         }
         await setTextOfInstance(newInstance, id);
+
+        newComponent.remove();
+
+        return newInstance;
     }
 
-    newComponent.remove();
+    return null;
 }
 
-async function listBox(page: string, id: string, widgets: any[]): Promise<void> {
+async function listBox(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionListBox");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     if (!component) {
-        return;
+        return null;
     }
 
     let newComponent = component.clone()
@@ -490,18 +574,22 @@ async function listBox(page: string, id: string, widgets: any[]): Promise<void> 
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
+
+        newComponent.remove();
+
+        return newInstance;
     }
 
-    newComponent.remove();
+    return null;
 }
 
 //EXAMPLE OF GO TO PAGE WORKING!
-async function menu(page: string, id: string, widgets: any[]): Promise<void> {
+async function menu(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionMenu");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     if (!component) {
-        return;
+        return null;
     }
 
     let newComponent = component.clone()
@@ -526,7 +614,6 @@ async function menu(page: string, id: string, widgets: any[]): Promise<void> {
                     const textChild = child.children.find(child => child.type === "TEXT") as TextNode;
 
                     if (textChild) {
-                        //console.log("CHILD");
                         textChild.characters = widget.id;
                     }
                     i++
@@ -560,34 +647,50 @@ async function menu(page: string, id: string, widgets: any[]): Promise<void> {
     const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
+
+        newComponent.remove();
+
+        return newInstance;
     }
 
-    newComponent.remove();
+    return null;
 }
 
-async function accordion(page: string, id: string): Promise<void> {
+async function accordion(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionAccordion");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance;
+    }
+
+    return null;
 }
 
-async function breadcrumb(page: string, id: string): Promise<void> {
+async function breadcrumb(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionBreadcrumb");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance;
+    }
+
+    return null;
 }
 
-async function numericStepper(page: string, id: string): Promise<void> {
+async function numericStepper(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionNumericStepper");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     if (!component) {
-        return;
+        return null;
     }
 
     let newComponent = component.clone()
@@ -641,9 +744,70 @@ async function numericStepper(page: string, id: string): Promise<void> {
             stringVar.setValueForMode(modeId, "0");
             textNode.setBoundVariable('characters', stringVar.id);
         }
+
+        newComponent.remove();
+
+        return newInstance;
     }
 
-    newComponent.remove();
+    return null;
+
+}
+
+async function modalWindow(page: string, id: string): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionBreadcrumb");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance;
+    }
+
+    return null;
+}
+
+async function windowDialog(page: string, id: string): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionBreadcrumb");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance;
+    }
+
+    return null;
+}
+
+async function notification(page: string, id: string): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionBreadcrumb");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance;
+    }
+
+    return null;
+}
+
+async function text(page: string, id: string): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionBreadcrumb");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+        return newInstance;
+    }
+
+    return null;
 }
 
 const functionMap: FunctionMap = {
@@ -659,20 +823,26 @@ const functionMap: FunctionMap = {
     "TimePicker": timePicker,
     "Icon": icon,
     "FieldSet": fieldSet,
+    "ModalWindow": modalWindow,
+    "WindowDialog": windowDialog,
+    "Notification": notification,
     "DropdownList": dropDownList,
     "ListBox": listBox,
     "Menu": menu,
     "Accordion": accordion,
     "Breadcrumb": breadcrumb,
-    "NumericStepper": numericStepper
+    "NumericStepper": numericStepper,
+    "Text": text,
+    "Label": text,
 
 };
 
-export async function callFunctionByName(functionName: string, params: any[] = []): Promise<void> {
+export async function callFunctionByName(functionName: string, params: any[] = []): Promise<InstanceNode | null> {
     if (functionMap[functionName]) {
-        await functionMap[functionName](...params);
+        return await functionMap[functionName](...params);
     } else {
         console.log("Function not found for:", functionName);
+        return null;
     }
 }
 
@@ -703,7 +873,6 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
         return null;
     }
 
-
     let componentToInstantiate;
 
     if (variant != null) {
@@ -713,18 +882,21 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
     }
 
     const instance = componentToInstantiate.createInstance();
-    instance.name = targetFrame.name + ":" + id;
-    instance.x = startOffset.x;
-    instance.y = startOffset.y;
 
-    allPositions.push({
-        page: targetFrame.name,
-        instance: instance,
-        id: id,
-        gridY: 1
-    });
+    if (!container) {
+        instance.name = targetFrame.name + ":" + id;
+        instance.x = startOffset.x;
+        instance.y = startOffset.y;
 
-    targetFrame.appendChild(instance);
+        allPositions.push({
+            page: targetFrame.name,
+            instance: instance,
+            id: id,
+            gridY: 1
+        });
+
+        targetFrame.appendChild(instance);
+    }
 
     return instance;
 }
