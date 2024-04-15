@@ -609,4 +609,32 @@ export class WidgetStateReactions {
         reactions.push(reaction);
         return reactions;
     }
+
+    openOverlay(reactions: any, overlayID: string) {
+        const reaction =
+        {
+            "action": {
+                "type": "NODE",
+                "destinationId": overlayID,
+                "navigation": "OVERLAY",
+                "transition": null,
+                "resetVideoPosition": false
+            },
+            "actions": [
+                {
+                    "type": "NODE",
+                    "destinationId": overlayID,
+                    "navigation": "OVERLAY",
+                    "transition": null,
+                    "resetVideoPosition": false
+                }
+            ],
+            "trigger": {
+                "type": "ON_CLICK"
+            }
+        }
+
+        reactions.push(reaction);
+        return reactions;
+    }
 }

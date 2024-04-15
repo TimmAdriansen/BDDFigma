@@ -24,15 +24,66 @@ let framePos = { x: 0, y: 0 };
 let allPositions: Position[] = [];
 
 let containerID: string | null = null;
+let count = 0;
 
 async function button(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionButton");
 
+    if (!component) {
+        return null;
+    }
+
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    /*let overLay = findComponentSetByName("ModalWindowTest:mWindow");
+    console.log(id);
+    console.log(overLay);
+    let newComponent = component.clone()
+    if (overLay && newComponent) {
+        console.log(overLay.id);
+        let specificVariant = null;
+        for (const variant of newComponent.children) {
+            if (variant.type === "COMPONENT" && variant.name.includes("Size=Regular, State=Default")) {
+                specificVariant = variant;
+            }
+        }
+        if(specificVariant){
+            let reactions = clone(specificVariant.reactions);
+            reactions = widgetStateReactions.goToPage(reactions, overLay.id)
+            specificVariant.reactions = reactions;
+        }
+    }*/
+
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 0;
+    newComponent.y = 0;
+
+    /*for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT") {
+            let secondFrame: FrameNode | null;
+            if(count == 0){
+                console.log(id);
+                secondFrame = findFrameByName("ModalWindowTest:mWindow");
+                if(secondFrame){
+                    count++;
+                }
+            } else{
+                secondFrame = findFrameByName("ModalWindowTest:mWindows");
+            }
+            if (secondFrame && currentFrame != secondFrame && currentFrame) {
+                let reactions = clone(variant.reactions);
+                reactions = widgetStateReactions.openOverlay(reactions, secondFrame.id)
+                variant.reactions = reactions;
+            }
+        }
+    }*/
+
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
+        newComponent.remove();
         await setTextOfInstance(newInstance, id);
     }
 
@@ -339,8 +390,8 @@ async function icon(page: string, id: string): Promise<InstanceNode | null> {
 async function fieldSet(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionFieldSet");
     let currentFrame: FrameNode | null = findFrameByName(page);
-    
-    if(currentFrame) containerID = currentFrame.name + ":" + id;
+
+    if (currentFrame) containerID = currentFrame.name + ":" + id;
 
     if (!component) {
         return null;
@@ -758,22 +809,75 @@ async function numericStepper(page: string, id: string): Promise<InstanceNode | 
 
 }
 
-async function modalWindow(page: string, id: string): Promise<InstanceNode | null> {
-    const component = findComponentSetByName("InteractionBreadcrumb");
+async function modalWindow(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionModal");
 
-    let currentFrame: FrameNode | null = findFrameByName(page);
+    if (!component) {
+        return null;
+    }
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    console.log(component.id)
 
-    if (newInstance) {
+    let newComponent = component.clone()
+
+    let specificVariant = null;
+
+    newComponent.name = page + ":" + id;
+
+    newComponent.x = -500;
+    newComponent.y = -500;
+
+    figma.currentPage.appendChild(newComponent);
+    console.log(newComponent.id)
+    //console.log(newComponent.id);
+
+    if (newComponent && "children" in newComponent) {
+
+        const containerVariant = newComponent.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+
+        //foreach widget append instance
+        for (const widget of widgets) {
+            let instance = await callFunctionByName(widget.widget, [page, widget.id])
+            if (instance) {
+                containerVariant.appendChild(instance);
+            }
+        }
+
+        containerID = null;
+
+        const newInstance = createInstanceFromSet(newComponent, null, startOffset, gridSpacing, id, null);
+
+
+        if (newInstance) {
+            newInstance.x = 10000
+            newInstance.y = 10000
+
+            newInstance?.detachInstance();
+
+            newComponent.remove();
+        }
         return newInstance;
+
     }
 
     return null;
 }
 
 async function windowDialog(page: string, id: string): Promise<InstanceNode | null> {
-    const component = findComponentSetByName("InteractionBreadcrumb");
+    const component = findComponentSetByName("ModalTest");
+
+    if (!component) {
+        return null;
+    }
+    console.log()
+
+    for (const variant of component.children) {
+        if (variant.type === "COMPONENT") {
+            let reactions = clone(variant.reactions);
+            console.log(reactions);
+        }
+    }
+
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
@@ -801,13 +905,31 @@ async function notification(page: string, id: string): Promise<InstanceNode | nu
 }
 
 async function text(page: string, id: string): Promise<InstanceNode | null> {
-    const component = findComponentSetByName("InteractionBreadcrumb");
+    const component = findComponentSetByName("InteractionText");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
+
+        await setTextOfInstance(newInstance, id);
+        return newInstance;
+    }
+
+    return null;
+}
+
+async function label(page: string, id: string): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionLabel");
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+
+    if (newInstance) {
+
+        await setTextOfInstance(newInstance, id);
         return newInstance;
     }
 
@@ -828,8 +950,8 @@ const functionMap: FunctionMap = {
     "Icon": icon,
     "FieldSet": fieldSet,
     "ModalWindow": modalWindow,
-    "WindowDialog": windowDialog,
-    "Notification": notification,
+    "WindowDialog": modalWindow,
+    "Notification": modalWindow,
     "DropdownList": dropDownList,
     "ListBox": listBox,
     "Menu": menu,
@@ -837,7 +959,7 @@ const functionMap: FunctionMap = {
     "Breadcrumb": breadcrumb,
     "NumericStepper": numericStepper,
     "Text": text,
-    "Label": text,
+    "Label": label,
 
 };
 
@@ -873,8 +995,18 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
     }
 
     if (!targetFrame || targetFrame.type !== "FRAME") {
-        console.error("Target frame is not a frame or not set.");
-        return null;
+        //console.error("Target frame is not a frame or not set.");
+        //return null;
+        let componentToInstantiate;
+
+        if (variant != null) {
+            componentToInstantiate = variant;
+        } else {
+            componentToInstantiate = componentSet.defaultVariant;
+        }
+
+        const instance = componentToInstantiate.createInstance();
+        return instance;
     }
 
     let componentToInstantiate;
@@ -900,7 +1032,7 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
         });
 
         targetFrame.appendChild(instance);
-    } else{
+    } else {
         instance.name = containerID + ":" + id;
     }
 
