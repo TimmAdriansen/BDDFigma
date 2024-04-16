@@ -816,7 +816,7 @@ async function modalWindow(page: string, id: string, widgets: any[]): Promise<In
         return null;
     }
 
-    console.log(component.id)
+    //console.log(component.id)
 
     let newComponent = component.clone()
 
@@ -828,7 +828,7 @@ async function modalWindow(page: string, id: string, widgets: any[]): Promise<In
     newComponent.y = -500;
 
     figma.currentPage.appendChild(newComponent);
-    console.log(newComponent.id)
+    //console.log(newComponent.id)
     //console.log(newComponent.id);
 
     if (newComponent && "children" in newComponent) {
@@ -988,6 +988,33 @@ function findFrameByName(name: string): FrameNode | null {
     return frame;
 }
 
+type NodeWithChildren = FrameNode | ComponentNode | InstanceNode | GroupNode;
+
+
+function findInstanceByName(instanceName: string): InstanceNode | null {
+    const page: PageNode = figma.currentPage; // Get the current page
+    let foundInstance: InstanceNode | null = null;
+
+    // Recursive function to search nodes
+    function searchNodes(nodes: ReadonlyArray<SceneNode>) {
+        for (const node of nodes) {
+            if (node.type === 'INSTANCE' && node.name === instanceName) {
+                foundInstance = node as InstanceNode;
+                return; // Stop searching once we find the instance
+            }
+            if ('children' in node) {
+                searchNodes((node as NodeWithChildren).children); // Recurse into children
+                if (foundInstance) return; // If found in children, stop searching
+            }
+        }
+    }
+
+    // Start the search with all top-level nodes on the page
+    searchNodes(page.children);
+
+    return foundInstance;
+}
+
 function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }, id: string, variant: ComponentNode | null): InstanceNode | null {
     if (!componentSet) {
         console.error("Component set not found.");
@@ -1117,4 +1144,19 @@ export function layoutPages() {
 
 function clone(val: any) {
     return JSON.parse(JSON.stringify(val))
+}
+
+export function applyActions() {
+    const button = findInstanceByName("ModalWindowTest:button3");
+    console.log(button);
+    const modalWindow = findFrameByName("ModalWindowTest:mWindow");
+    console.log(modalWindow);
+
+    if (button && modalWindow) {
+        let reactions = clone(button.reactions);
+        reactions = widgetStateReactions.openOverlay(reactions, modalWindow.id)
+        button.reactions = reactions;
+    }
+
+
 }

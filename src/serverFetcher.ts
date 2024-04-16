@@ -1,4 +1,4 @@
-import { callFunctionByName, resetAllPositions, layoutPages } from "./widgets";
+import { callFunctionByName, resetAllPositions, layoutPages, applyActions } from "./widgets";
 
 
 export function pollServer(lastPolledTime = Date.now()) {
@@ -16,7 +16,7 @@ export function pollServer(lastPolledTime = Date.now()) {
             if (data) {
                 //console.log('Data from server:', data);
                 if (data !== '<empty><empty>') {
-                    //console.log('Data from server:', data);
+                    console.log('Data from server:', data);
                     loopData(data);
                     //parent.postMessage({ pluginMessage: { type: 'create-button' } }, '*')
                 }
@@ -78,6 +78,7 @@ async function loopData(data: string): Promise<void> {
         }
         layoutPages(); // Call layoutPages after all the asynchronous operations have completed
         resetAllPositions();
+        //applyActions();
     } catch (error) {
         console.error("Error parsing data:", error);
     }

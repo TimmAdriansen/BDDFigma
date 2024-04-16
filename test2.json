@@ -1,0 +1,132 @@
+{
+    "BrowserWindows": [
+        {
+            "page": "First page",
+            "widgets": [
+                {
+                    "widget": "Button",
+                    "id": "Open popup"
+                },
+                {
+                    "widget": "ModalWindow",
+                    "id": "ModalPopup",
+                    "actions": [
+                        {
+                            "type": "displayed",
+                            "params": {},
+                            "negated": false,
+                            "conditions": [
+                                {
+                                    "type": "click",
+                                    "params": {
+                                        "widget": "Button",
+                                        "id": "Open popup"
+                                    },
+                                    "negated": false
+                                }
+                            ]
+                        }
+                    ],
+                    "widgets": [
+                        {
+                            "widget": "Label",
+                            "id": "Title"
+                        },
+                        {
+                            "widget": "Text",
+                            "id": "Body"
+                        },
+                        {
+                            "widget": "Button",
+                            "id": "Confirm"
+                        },
+                        {
+                            "widget": "Text",
+                            "id": "ModalText"
+                        },
+                        {
+                            "widget": "Button",
+                            "id": "Change Value"
+                        }
+                    ]
+                },
+                {
+                    "widget": "Button",
+                    "id": "Switch page"
+                }
+            ],
+            "actions": [
+                {
+                    "type": "displayed",
+                    "params": {},
+                    "negated": false,
+                    "conditions": [
+                        {
+                            "type": "check",
+                            "params": {
+                                "widget": "CheckBox",
+                                "id": "CheckBox"
+                            },
+                            "negated": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "page": "Second page",
+            "widgets": [
+                {
+                    "widget": "FieldSet",
+                    "id": "FieldSetExample",
+                    "widgets": [
+                        {
+                            "widget": "Label",
+                            "id": "FieldSet Example Title"
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "CheckBox"
+                        },
+                        {
+                            "widget": "TextField",
+                            "id": "TextField"
+                        }
+                    ]
+                }
+            ],
+            "actions": [
+                {
+                    "type": "displayed",
+                    "params": {},
+                    "negated": false,
+                    "conditions": [
+                        {
+                            "type": "click",
+                            "params": {
+                                "widget": "Button",
+                                "id": "Confirm"
+                            },
+                            "negated": false
+                        }
+                    ]
+                },
+                {
+                    "type": "displayed",
+                    "params": {},
+                    "negated": false,
+                    "conditions": [
+                        {
+                            "type": "click",
+                            "params": {
+                                "widget": "Button",
+                                "id": "Switch page"
+                            },
+                            "negated": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
