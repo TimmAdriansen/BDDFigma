@@ -68,9 +68,9 @@ async function loopData(data: string): Promise<void> {
             //console.log(`Page: ${window.page}`);
             for (const widget of window.widgets) {
                 if (widget.widget === "FieldSet" || widget.widget === "DropdownList" || widget.widget === "ListBox" || widget.widget === "Menu" || widget.widget === "ModalWindow" || widget.widget === "WindowDialog") {
-                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.widgets]);
+                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.widgets, widget.properties]);
                 } else {
-                    await callFunctionByName(widget.widget, [window.page, widget.id]);
+                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.properties]);
                 }
                 //console.log(` Widget: Type - ${widget.widget}, ID - ${widget.id}`);
             }

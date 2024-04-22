@@ -411,7 +411,7 @@ async function fieldSet(page: string, id: string, widgets: any[]): Promise<Insta
 
         //foreach widget append instance
         for (const widget of widgets) {
-            let instance = await callFunctionByName(widget.widget, [page, widget.id])
+            let instance = await callFunctionByName(widget.widget, [page, widget.id, widget.properties])
             if (instance) {
                 containerVariant.appendChild(instance);
             }
@@ -837,7 +837,7 @@ async function modalWindow(page: string, id: string, widgets: any[]): Promise<In
 
         //foreach widget append instance
         for (const widget of widgets) {
-            let instance = await callFunctionByName(widget.widget, [page, widget.id])
+            let instance = await callFunctionByName(widget.widget, [page, widget.id, widget.properties])
             if (instance) {
                 containerVariant.appendChild(instance);
             }
@@ -904,32 +904,50 @@ async function notification(page: string, id: string): Promise<InstanceNode | nu
     return null;
 }
 
-async function text(page: string, id: string): Promise<InstanceNode | null> {
+async function text(page: string, id: string, properties: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionText");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
+    let text;
+
+    if(properties.length > 0){
+        text = properties[0].text;
+    } else{
+        text = id;
+    }
+
     if (newInstance) {
 
-        await setTextOfInstance(newInstance, id);
+        await setTextOfInstance(newInstance, text);
         return newInstance;
     }
 
     return null;
 }
 
-async function label(page: string, id: string): Promise<InstanceNode | null> {
+async function label(page: string, id: string, properties: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionLabel");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
+
+    let text;
+
+    console.log(properties);
+
+    if(properties.length > 0){
+        text =  properties[0].text;
+    } else{
+        text = id;
+    }
 
     const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
 
     if (newInstance) {
 
-        await setTextOfInstance(newInstance, id);
+        await setTextOfInstance(newInstance, text);
         return newInstance;
     }
 

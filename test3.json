@@ -6,8 +6,7 @@
                 {
                     "widget": "Button",
                     "id": "Open popup",
-                    "actions": [],
-                    "properties": []
+                    "actions": []
                 },
                 {
                     "widget": "ModalWindow",
@@ -29,33 +28,23 @@
                             ]
                         }
                     ],
-                    "properties": [],
                     "widgets": [
                         {
                             "widget": "Label",
                             "id": "Title",
                             "actions": [],
-                            "properties": [
-                                {
-                                    "text": "ModalWindow Example"
-                                }
-                            ]
+                            "text": "ModalWindow Example"
                         },
                         {
                             "widget": "Text",
                             "id": "Body",
                             "actions": [],
-                            "properties": [
-                                {
-                                    "text": "Body text goes here"
-                                }
-                            ]
+                            "text": "Body text goes here"
                         },
                         {
                             "widget": "Button",
                             "id": "Confirm",
-                            "actions": [],
-                            "properties": []
+                            "actions": []
                         },
                         {
                             "widget": "Text",
@@ -78,28 +67,24 @@
                                         }
                                     ]
                                 }
-                            ],
-                            "properties": []
+                            ]
                         },
                         {
                             "widget": "Button",
                             "id": "Change Value",
-                            "actions": [],
-                            "properties": []
+                            "actions": []
                         }
                     ]
                 },
                 {
                     "widget": "Button",
                     "id": "Switch page",
-                    "actions": [],
-                    "properties": []
+                    "actions": []
                 },
                 {
                     "widget": "Button",
                     "id": "Switch page and change",
-                    "actions": [],
-                    "properties": []
+                    "actions": []
                 },
                 {
                     "widget": "Label",
@@ -122,8 +107,7 @@
                                 }
                             ]
                         }
-                    ],
-                    "properties": []
+                    ]
                 }
             ],
             "actions": [
@@ -151,25 +135,21 @@
                     "widget": "FieldSet",
                     "id": "FieldSetExample",
                     "actions": [],
-                    "properties": [],
                     "widgets": [
                         {
                             "widget": "Label",
                             "id": "FieldSet Example Title",
-                            "actions": [],
-                            "properties": []
+                            "actions": []
                         },
                         {
                             "widget": "CheckBox",
                             "id": "CheckBox",
-                            "actions": [],
-                            "properties": []
+                            "actions": []
                         },
                         {
                             "widget": "TextField",
                             "id": "TextField",
-                            "actions": [],
-                            "properties": []
+                            "actions": []
                         }
                     ]
                 }
