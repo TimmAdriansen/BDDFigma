@@ -17,7 +17,17 @@ export function pollServer(lastPolledTime = Date.now()) {
                 //console.log('Data from server:', data);
                 if (data !== '<empty><empty>') {
                     console.log('Data from server:', data);
-                    loopData(data);
+                    if (data == "printAllActions") {
+                        figma.currentPage.children.forEach(node => {
+                            printNodeReactions(node);
+                        });
+                    } else if (data == "printSelectedActions") {
+                        figma.currentPage.selection.forEach(node => {
+                            printNodeReactions(node);
+                        });
+                    } else {
+                        loopData(data);
+                    }
                     //parent.postMessage({ pluginMessage: { type: 'create-button' } }, '*')
                 }
                 // Update last polled time and start a new poll
@@ -78,9 +88,42 @@ async function loopData(data: string): Promise<void> {
         }
         layoutPages(); // Call layoutPages after all the asynchronous operations have completed
         resetAllPositions();
+
+        for (const window of jsonData.BrowserWindows) {
+            console.log(window.page);
+            processWidgetActions(window);
+        }
         //applyActions();
     } catch (error) {
         console.error("Error parsing data:", error);
     }
 }
 
+function processWidgetActions(widget: any) {
+    // Check if the widget has actions and pass them to handleWidgetActions
+    if (widget.actions && widget.actions.length > 0) {
+        //handleWidgetActions(widget.actions);
+        console.log(widget.id);
+        console.log(widget.actions);
+    }
+
+    // Check if the widget has a nested list of widgets and recurse through them
+    if (widget.widgets && widget.widgets.length > 0) {
+        widget.widgets.forEach((nestedWidget: any) => processWidgetActions(nestedWidget));
+    }
+}
+
+function printNodeReactions(node: any) {
+    // Check if the node has a name and reactions are defined
+    if (node.name && node.reactions && node.reactions.length > 0) {
+        console.log(`Node Name: ${node.name}`);
+        console.log('Reactions:', JSON.stringify(node.reactions, null, 2));
+    }
+
+    // Recursively call this function for each child node if they exist
+    if ('children' in node) {
+        for (const child of node.children) {
+            printNodeReactions(child);
+        }
+    }
+}

@@ -1,17 +1,65 @@
 {
     "BrowserWindows": [
         {
-            "page": "First page",
+            "page": "FieldSet example",
             "widgets": [
                 {
-                    "widget": "Button",
-                    "id": "Open popup",
+                    "widget": "FieldSet",
+                    "id": "FieldSet1",
                     "actions": [],
-                    "properties": []
+                    "properties": [],
+                    "widgets": [
+                        {
+                            "widget": "Label",
+                            "id": "Option selector",
+                            "actions": [],
+                            "properties": []
+                        },
+                        {
+                            "widget": "Text",
+                            "id": "BodyText",
+                            "actions": [],
+                            "properties": [
+                                {
+                                    "text": "You can choose one of the following phones"
+                                }
+                            ]
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "Samsung",
+                            "actions": [],
+                            "properties": []
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "iPhone",
+                            "actions": [],
+                            "properties": []
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "HTC",
+                            "actions": [],
+                            "properties": []
+                        },
+                        {
+                            "widget": "CheckBox",
+                            "id": "Nokia",
+                            "actions": [],
+                            "properties": []
+                        },
+                        {
+                            "widget": "ToggleButton",
+                            "id": "Used",
+                            "actions": [],
+                            "properties": []
+                        }
+                    ]
                 },
                 {
                     "widget": "ModalWindow",
-                    "id": "ModalPopup",
+                    "id": "ChosenPhoneModal",
                     "actions": [
                         {
                             "type": "displayed",
@@ -19,10 +67,10 @@
                             "negated": false,
                             "conditions": [
                                 {
-                                    "type": "click",
+                                    "type": "check",
                                     "params": {
-                                        "widget": "Button",
-                                        "id": "First page:Open popup"
+                                        "widget": "CheckBox",
+                                        "id": "FieldSet example:FieldSet1:Samsung"
                                     },
                                     "negated": false
                                 }
@@ -33,46 +81,18 @@
                     "widgets": [
                         {
                             "widget": "Label",
-                            "id": "Title",
-                            "actions": [],
-                            "properties": [
-                                {
-                                    "text": "ModalWindow Example"
-                                }
-                            ]
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "Body",
-                            "actions": [],
-                            "properties": [
-                                {
-                                    "text": "Body text goes here"
-                                }
-                            ]
-                        },
-                        {
-                            "widget": "Button",
-                            "id": "Confirm",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "ModalText",
+                            "id": "Here is your selected choice",
                             "actions": [
                                 {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "500"
-                                    },
+                                    "type": "displayed",
+                                    "params": {},
                                     "negated": false,
                                     "conditions": [
                                         {
-                                            "type": "click",
+                                            "type": "check",
                                             "params": {
-                                                "widget": "Button",
-                                                "id": "First page:ModalPopup:Change Value"
+                                                "widget": "CheckBox",
+                                                "id": "FieldSet example:FieldSet1:Samsung"
                                             },
                                             "negated": false
                                         }
@@ -82,130 +102,125 @@
                             "properties": []
                         },
                         {
-                            "widget": "Button",
-                            "id": "Change Value",
-                            "actions": [],
-                            "properties": []
-                        }
-                    ]
-                },
-                {
-                    "widget": "Button",
-                    "id": "Switch page",
-                    "actions": [],
-                    "properties": []
-                },
-                {
-                    "widget": "Button",
-                    "id": "Switch page and change",
-                    "actions": [],
-                    "properties": []
-                },
-                {
-                    "widget": "Label",
-                    "id": "TextLabel",
-                    "actions": [
-                        {
-                            "type": "settext",
-                            "params": {
-                                "value": "100"
-                            },
-                            "negated": false,
-                            "conditions": [
+                            "widget": "Text",
+                            "id": "Chosen phone",
+                            "actions": [
                                 {
-                                    "type": "click",
+                                    "type": "settext",
                                     "params": {
-                                        "widget": "Button",
-                                        "id": "First page:Switch page and change"
+                                        "value": "Samsung"
                                     },
-                                    "negated": false
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "check",
+                                            "params": {
+                                                "widget": "CheckBox",
+                                                "id": "FieldSet example:FieldSet1:Samsung"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "settext",
+                                    "params": {
+                                        "value": "iPhone"
+                                    },
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "check",
+                                            "params": {
+                                                "widget": "CheckBox",
+                                                "id": "FieldSet example:FieldSet1:iPhone"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "settext",
+                                    "params": {
+                                        "value": "HTC"
+                                    },
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "check",
+                                            "params": {
+                                                "widget": "CheckBox",
+                                                "id": "FieldSet example:FieldSet1:HTC"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "settext",
+                                    "params": {
+                                        "value": "Nokia"
+                                    },
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "check",
+                                            "params": {
+                                                "widget": "CheckBox",
+                                                "id": "FieldSet example:FieldSet1:Nokia"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
                                 }
-                            ]
-                        }
-                    ],
-                    "properties": []
-                }
-            ],
-            "actions": [
-                {
-                    "type": "displayed",
-                    "params": {},
-                    "negated": false,
-                    "conditions": [
-                        {
-                            "type": "check",
-                            "params": {
-                                "widget": "CheckBox",
-                                "id": "Second page:CheckBox"
-                            },
-                            "negated": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "page": "Second page",
-            "widgets": [
-                {
-                    "widget": "FieldSet",
-                    "id": "FieldSetExample",
-                    "actions": [],
-                    "properties": [],
-                    "widgets": [
-                        {
-                            "widget": "Label",
-                            "id": "FieldSet Example Title",
-                            "actions": [],
+                            ],
                             "properties": []
                         },
                         {
-                            "widget": "CheckBox",
-                            "id": "CheckBox",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "TextField",
-                            "id": "TextField",
-                            "actions": [],
+                            "widget": "Text",
+                            "id": "is it used or not",
+                            "actions": [
+                                {
+                                    "type": "settext",
+                                    "params": {
+                                        "value": "Used"
+                                    },
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "switch on",
+                                            "params": {
+                                                "widget": "ToggleButton",
+                                                "id": "FieldSet example:FieldSet1:Used"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "settext",
+                                    "params": {
+                                        "value": "Not used"
+                                    },
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "switch off",
+                                            "params": {
+                                                "widget": "ToggleButton",
+                                                "id": "FieldSet example:FieldSet1:Used"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
+                                }
+                            ],
                             "properties": []
                         }
                     ]
                 }
             ],
-            "actions": [
-                {
-                    "type": "displayed",
-                    "params": {},
-                    "negated": false,
-                    "conditions": [
-                        {
-                            "type": "click",
-                            "params": {
-                                "widget": "Button",
-                                "id": "First page:ModalPopup:Confirm"
-                            },
-                            "negated": false
-                        }
-                    ]
-                },
-                {
-                    "type": "displayed",
-                    "params": {},
-                    "negated": false,
-                    "conditions": [
-                        {
-                            "type": "click",
-                            "params": {
-                                "widget": "Button",
-                                "id": "First page:Switch page"
-                            },
-                            "negated": false
-                        }
-                    ]
-                }
-            ]
+            "actions": []
         }
     ]
 }

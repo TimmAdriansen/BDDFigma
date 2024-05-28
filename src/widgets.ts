@@ -869,12 +869,12 @@ async function windowDialog(page: string, id: string): Promise<InstanceNode | nu
     if (!component) {
         return null;
     }
-    console.log()
+    //console.log()
 
     for (const variant of component.children) {
         if (variant.type === "COMPONENT") {
             let reactions = clone(variant.reactions);
-            console.log(reactions);
+            //console.log(reactions);
         }
     }
 
@@ -935,7 +935,7 @@ async function label(page: string, id: string, properties: any[]): Promise<Insta
 
     let text;
 
-    console.log(properties);
+    //console.log(properties);
 
     if(properties.length > 0){
         text =  properties[0].text;
