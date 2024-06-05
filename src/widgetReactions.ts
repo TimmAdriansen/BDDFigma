@@ -565,73 +565,120 @@ export class WidgetReactions {
         reactions.push(reaction);
         return reactions;
     }
-}
 
-export class WidgetStateReactions {
-    //Then states
-
-    goToPage(reactions: any, pageID: string) {
-        const reaction =
-        {
+    toggleButtonReactions(id: string, reactions: any){
+        const reaction = {
             "action": {
-                "type": "NODE",
-                "destinationId": pageID,
-                "navigation": "NAVIGATE",
-                "transition": {
-                    "type": "SMART_ANIMATE",
-                    "easing": {
-                        "type": "EASE_OUT"
-                    },
-                    "duration": 0.30000001192092896
-                },
-                "resetVideoPosition": false
-            },
-            "actions": [
+                "type": "CONDITIONAL",
+                "conditionalBlocks": [
+                  {
+                    "actions": [
+                      {
+                        "type": "SET_VARIABLE",
+                        "variableId": id,
+                        "variableValue": {
+                          "value": true,
+                          "type": "BOOLEAN",
+                          "resolvedType": "BOOLEAN"
+                        }
+                      }
+                    ],
+                    "condition": {
+                      "value": {
+                        "expressionArguments": [
+                          {
+                            "value": {
+                              "type": "VARIABLE_ALIAS",
+                              "id": id
+                            },
+                            "type": "VARIABLE_ALIAS",
+                            "resolvedType": "BOOLEAN"
+                          },
+                          {
+                            "value": false,
+                            "type": "BOOLEAN",
+                            "resolvedType": "BOOLEAN"
+                          }
+                        ],
+                        "expressionFunction": "EQUALS"
+                      },
+                      "type": "EXPRESSION",
+                      "resolvedType": "BOOLEAN"
+                    }
+                  },
+                  {
+                    "actions": [
+                      {
+                        "type": "SET_VARIABLE",
+                        "variableId": id,
+                        "variableValue": {
+                          "value": false,
+                          "type": "BOOLEAN",
+                          "resolvedType": "BOOLEAN"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "actions": [
                 {
-                    "type": "NODE",
-                    "destinationId": pageID,
-                    "navigation": "NAVIGATE",
-                    "transition": {
-                        "type": "SMART_ANIMATE",
-                        "easing": {
-                            "type": "EASE_OUT"
+                  "type": "CONDITIONAL",
+                  "conditionalBlocks": [
+                    {
+                      "actions": [
+                        {
+                          "type": "SET_VARIABLE",
+                          "variableId": id,
+                          "variableValue": {
+                            "value": true,
+                            "type": "BOOLEAN",
+                            "resolvedType": "BOOLEAN"
+                          }
+                        }
+                      ],
+                      "condition": {
+                        "value": {
+                          "expressionArguments": [
+                            {
+                              "value": {
+                                "type": "VARIABLE_ALIAS",
+                                "id": id
+                              },
+                              "type": "VARIABLE_ALIAS",
+                              "resolvedType": "BOOLEAN"
+                            },
+                            {
+                              "value": false,
+                              "type": "BOOLEAN",
+                              "resolvedType": "BOOLEAN"
+                            }
+                          ],
+                          "expressionFunction": "EQUALS"
                         },
-                        "duration": 0.30000001192092896
+                        "type": "EXPRESSION",
+                        "resolvedType": "BOOLEAN"
+                      }
                     },
-                    "resetVideoPosition": false
+                    {
+                      "actions": [
+                        {
+                          "type": "SET_VARIABLE",
+                          "variableId": id,
+                          "variableValue": {
+                            "value": false,
+                            "type": "BOOLEAN",
+                            "resolvedType": "BOOLEAN"
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 }
-            ],
-            "trigger": {
+              ],
+              "trigger": {
                 "type": "ON_CLICK"
-            }
-        }
-
-        reactions.push(reaction);
-        return reactions;
-    }
-
-    openOverlay(reactions: any, overlayID: string) {
-        const reaction =
-        {
-            "action": {
-                "type": "NODE",
-                "destinationId": overlayID,
-                "navigation": "OVERLAY",
-                "transition": null,
-                "resetVideoPosition": false
-            },
-            "actions": [
-                {
-                    "type": "NODE",
-                    "destinationId": overlayID,
-                    "navigation": "OVERLAY",
-                    "transition": null,
-                    "resetVideoPosition": false
-                }
-            ],
-            "trigger": {
-                "type": "ON_CLICK"
-            }
+              }
         }
 
         reactions.push(reaction);

@@ -10,9 +10,14 @@
     <option value="searchBar">Search Bar</option>
   </select>
   <button id="sendWidget">Send Widget</button>
+  <button id="logProp">logNode</button>
   <script>
     document.getElementById('btn').onclick = () => {
       parent.postMessage({ pluginMessage: { type: 'create-button' } }, '*')
+    }
+
+    document.getElementById('logProp').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'log-button' } }, '*')
     }
 
     document.getElementById('sendWidget').onclick = () => {

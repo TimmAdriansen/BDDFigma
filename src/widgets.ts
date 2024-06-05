@@ -1,7 +1,8 @@
-import { WidgetReactions, WidgetStateReactions } from "./widgetReactions";
+import { WidgetReactions } from "./widgetReactions";
+import { WidgetStateReactionsBuilder } from "./widgetStateReactionBuilder";
 
 let widgetReactions = new WidgetReactions();
-let widgetStateReactions = new WidgetStateReactions();
+let widgetStateReactions = new WidgetStateReactionsBuilder();
 
 type FunctionMap = {
     [key: string]: (...args: any[]) => Promise<InstanceNode | null>;
@@ -286,14 +287,55 @@ async function searchBox(page: string, id: string): Promise<InstanceNode | null>
 
 
 async function radioButton(page: string, id: string): Promise<InstanceNode | null> {
-    const component = findComponentSetByName("InteractionRadioButton");
+    const component = findComponentSetByName("InteractionRadioButton2");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    if (!component) {
+        return null;
+    }
 
-    if (newInstance) {
-        await setTextOfInstance(newInstance, id);
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+        let reactions = clone(specificVariant.reactions);
+
+        let name = page + ":" + id + ":var:" + "value";
+
+        const boolVar = figma.variables.createVariable(name, collection.id, "BOOLEAN");
+
+        reactions = widgetReactions.toggleButtonReactions(boolVar.id, reactions);
+
+        specificVariant.reactions = reactions;
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+
+        if (newInstance) {
+
+            const frameNode = newInstance.findOne(child => child.name === 'ON' && child.type === 'FRAME') as FrameNode;
+
+            if (frameNode) {
+                frameNode.setBoundVariable('visible', boolVar.id);
+            }
+
+            await setTextOfInstance(newInstance, id);
+        }
+
+        newComponent.remove();
 
         return newInstance;
     }
@@ -302,14 +344,56 @@ async function radioButton(page: string, id: string): Promise<InstanceNode | nul
 }
 
 async function toggleButton(page: string, id: string): Promise<InstanceNode | null> {
-    const component = findComponentSetByName("InteractionToggle");
+    const component = findComponentSetByName("InteractionToggle2");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    if (!component) {
+        return null;
+    }
 
-    if (newInstance) {
-        await setTextOfInstance(newInstance, id);
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
+
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+        let reactions = clone(specificVariant.reactions);
+
+        let name = page + ":" + id + ":var:" + "value";
+
+        const boolVar = figma.variables.createVariable(name, collection.id, "BOOLEAN");
+
+        reactions = widgetReactions.toggleButtonReactions(boolVar.id, reactions);
+
+        specificVariant.reactions = reactions;
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+
+        if (newInstance) {
+
+            const frameNode = newInstance.findOne(child => child.name === 'ON' && child.type === 'FRAME') as FrameNode;
+
+            if (frameNode) {
+                frameNode.setBoundVariable('visible', boolVar.id);
+            }
+
+            await setTextOfInstance(newInstance, id);
+        }
+
+        newComponent.remove();
+
         return newInstance;
     }
 
@@ -317,14 +401,56 @@ async function toggleButton(page: string, id: string): Promise<InstanceNode | nu
 }
 
 async function checkBox(page: string, id: string): Promise<InstanceNode | null> {
-    const component = findComponentSetByName("InteractionCheckbox");
+    const component = findComponentSetByName("InteractionCheckbox2");
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    if (!component) {
+        return null;
+    }
+    
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
 
-    if (newInstance) {
-        await setTextOfInstance(newInstance, id);
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+        let reactions = clone(specificVariant.reactions);
+
+        let name = page + ":" + id + ":var:" + "value";
+
+        const boolVar = figma.variables.createVariable(name, collection.id, "BOOLEAN");
+
+        reactions = widgetReactions.toggleButtonReactions(boolVar.id, reactions);
+
+        specificVariant.reactions = reactions;
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+
+        if (newInstance) {
+
+            const frameNode = newInstance.findOne(child => child.name === 'ON' && child.type === 'FRAME') as FrameNode;
+
+            if (frameNode) {
+                frameNode.setBoundVariable('visible', boolVar.id);
+            }
+
+            await setTextOfInstance(newInstance, id);
+        }
+
+        newComponent.remove();
+
         return newInstance;
     }
 
@@ -913,9 +1039,9 @@ async function text(page: string, id: string, properties: any[]): Promise<Instan
 
     let text;
 
-    if(properties.length > 0){
+    if (properties.length > 0) {
         text = properties[0].text;
-    } else{
+    } else {
         text = id;
     }
 
@@ -937,9 +1063,9 @@ async function label(page: string, id: string, properties: any[]): Promise<Insta
 
     //console.log(properties);
 
-    if(properties.length > 0){
-        text =  properties[0].text;
-    } else{
+    if (properties.length > 0) {
+        text = properties[0].text;
+    } else {
         text = id;
     }
 

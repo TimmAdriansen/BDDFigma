@@ -1,191 +1,115 @@
-{
-    "BrowserWindows": [
-        {
-            "page": "First page",
-            "widgets": [
-                {
-                    "widget": "Button",
-                    "id": "Open popup",
-                    "actions": []
-                },
-                {
-                    "widget": "ModalWindow",
-                    "id": "ModalPopup",
-                    "actions": [
-                        {
-                            "type": "displayed",
-                            "params": {},
-                            "negated": false,
-                            "conditions": [
-                                {
-                                    "type": "click",
-                                    "params": {
-                                        "widget": "Button",
-                                        "id": "First page:Open popup"
-                                    },
-                                    "negated": false
-                                }
-                            ]
-                        }
-                    ],
-                    "widgets": [
-                        {
-                            "widget": "Label",
-                            "id": "Title",
-                            "actions": [],
-                            "text": "ModalWindow Example"
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "Body",
-                            "actions": [],
-                            "text": "Body text goes here"
-                        },
-                        {
-                            "widget": "Button",
-                            "id": "Confirm",
-                            "actions": []
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "ModalText",
-                            "actions": [
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "500"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "click",
-                                            "params": {
-                                                "widget": "Button",
-                                                "id": "First page:ModalPopup:Change Value"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "widget": "Button",
-                            "id": "Change Value",
-                            "actions": []
-                        }
-                    ]
-                },
-                {
-                    "widget": "Button",
-                    "id": "Switch page",
-                    "actions": []
-                },
-                {
-                    "widget": "Button",
-                    "id": "Switch page and change",
-                    "actions": []
-                },
-                {
-                    "widget": "Label",
-                    "id": "TextLabel",
-                    "actions": [
-                        {
-                            "type": "settext",
-                            "params": {
-                                "value": "100"
-                            },
-                            "negated": false,
-                            "conditions": [
-                                {
-                                    "type": "click",
-                                    "params": {
-                                        "widget": "Button",
-                                        "id": "First page:Switch page and change"
-                                    },
-                                    "negated": false
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
+[
+    {
+      "action": {
+        "type": "CONDITIONAL",
+        "conditionalBlocks": [
+          {
             "actions": [
-                {
-                    "type": "displayed",
-                    "params": {},
-                    "negated": false,
-                    "conditions": [
-                        {
-                            "type": "check",
-                            "params": {
-                                "widget": "CheckBox",
-                                "id": "Second page:CheckBox"
-                            },
-                            "negated": false
-                        }
-                    ]
+              {
+                "type": "SET_VARIABLE",
+                "variableId": "VariableID:2093:827",
+                "variableValue": {
+                  "value": true,
+                  "type": "BOOLEAN",
+                  "resolvedType": "BOOLEAN"
                 }
-            ]
-        },
-        {
-            "page": "Second page",
-            "widgets": [
-                {
-                    "widget": "FieldSet",
-                    "id": "FieldSetExample",
-                    "actions": [],
-                    "widgets": [
-                        {
-                            "widget": "Label",
-                            "id": "FieldSet Example Title",
-                            "actions": []
-                        },
-                        {
-                            "widget": "CheckBox",
-                            "id": "CheckBox",
-                            "actions": []
-                        },
-                        {
-                            "widget": "TextField",
-                            "id": "TextField",
-                            "actions": []
-                        }
-                    ]
-                }
+              }
             ],
+            "condition": {
+              "value": {
+                "expressionArguments": [
+                  {
+                    "value": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2093:827"
+                    },
+                    "type": "VARIABLE_ALIAS",
+                    "resolvedType": "BOOLEAN"
+                  },
+                  {
+                    "value": false,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                ],
+                "expressionFunction": "EQUALS"
+              },
+              "type": "EXPRESSION",
+              "resolvedType": "BOOLEAN"
+            }
+          },
+          {
             "actions": [
-                {
-                    "type": "displayed",
-                    "params": {},
-                    "negated": false,
-                    "conditions": [
-                        {
-                            "type": "click",
-                            "params": {
-                                "widget": "Button",
-                                "id": "First page:ModalPopup:Confirm"
-                            },
-                            "negated": false
-                        }
-                    ]
-                },
-                {
-                    "type": "displayed",
-                    "params": {},
-                    "negated": false,
-                    "conditions": [
-                        {
-                            "type": "click",
-                            "params": {
-                                "widget": "Button",
-                                "id": "First page:Switch page"
-                            },
-                            "negated": false
-                        }
-                    ]
+              {
+                "type": "SET_VARIABLE",
+                "variableId": "VariableID:2093:827",
+                "variableValue": {
+                  "value": false,
+                  "type": "BOOLEAN",
+                  "resolvedType": "BOOLEAN"
                 }
+              }
             ]
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "CONDITIONAL",
+          "conditionalBlocks": [
+            {
+              "actions": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variableId": "VariableID:2093:827",
+                  "variableValue": {
+                    "value": true,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                }
+              ],
+              "condition": {
+                "value": {
+                  "expressionArguments": [
+                    {
+                      "value": {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2093:827"
+                      },
+                      "type": "VARIABLE_ALIAS",
+                      "resolvedType": "BOOLEAN"
+                    },
+                    {
+                      "value": false,
+                      "type": "BOOLEAN",
+                      "resolvedType": "BOOLEAN"
+                    }
+                  ],
+                  "expressionFunction": "EQUALS"
+                },
+                "type": "EXPRESSION",
+                "resolvedType": "BOOLEAN"
+              }
+            },
+            {
+              "actions": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variableId": "VariableID:2093:827",
+                  "variableValue": {
+                    "value": false,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                }
+              ]
+            }
+          ]
         }
-    ]
-}
+      ],
+      "trigger": {
+        "type": "ON_CLICK"
+      }
+    }
+  ]

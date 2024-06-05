@@ -68,10 +68,6 @@ figma.ui.onmessage = async (msg) => {
     figma.viewport.scrollAndZoomIntoView([button]);
   }*/
 
-  if (msg.type === 'data-drop') {
-
-  }
-
   if (msg.type === 'widget-type') {
     const { widgetSpecificType, ...otherParams } = msg.params;
     await callFunctionByName(msg.params.widgetSpecificType)

@@ -1,226 +1,168 @@
-{
-    "BrowserWindows": [
-        {
-            "page": "FieldSet example",
-            "widgets": [
-                {
-                    "widget": "FieldSet",
-                    "id": "FieldSet1",
-                    "actions": [],
-                    "properties": [],
-                    "widgets": [
-                        {
-                            "widget": "Label",
-                            "id": "Option selector",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "BodyText",
-                            "actions": [],
-                            "properties": [
-                                {
-                                    "text": "You can choose one of the following phones"
-                                }
-                            ]
-                        },
-                        {
-                            "widget": "CheckBox",
-                            "id": "Samsung",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "CheckBox",
-                            "id": "iPhone",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "CheckBox",
-                            "id": "HTC",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "CheckBox",
-                            "id": "Nokia",
-                            "actions": [],
-                            "properties": []
-                        },
-                        {
-                            "widget": "ToggleButton",
-                            "id": "Used",
-                            "actions": [],
-                            "properties": []
-                        }
-                    ]
-                },
-                {
-                    "widget": "ModalWindow",
-                    "id": "ChosenPhoneModal",
-                    "actions": [
-                        {
-                            "type": "displayed",
-                            "params": {},
-                            "negated": false,
-                            "conditions": [
-                                {
-                                    "type": "check",
-                                    "params": {
-                                        "widget": "CheckBox",
-                                        "id": "FieldSet example:FieldSet1:Samsung"
-                                    },
-                                    "negated": false
-                                }
-                            ]
-                        }
-                    ],
-                    "properties": [],
-                    "widgets": [
-                        {
-                            "widget": "Label",
-                            "id": "Here is your selected choice",
-                            "actions": [
-                                {
-                                    "type": "displayed",
-                                    "params": {},
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "check",
-                                            "params": {
-                                                "widget": "CheckBox",
-                                                "id": "FieldSet example:FieldSet1:Samsung"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                }
-                            ],
-                            "properties": []
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "Chosen phone",
-                            "actions": [
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "Samsung"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "check",
-                                            "params": {
-                                                "widget": "CheckBox",
-                                                "id": "FieldSet example:FieldSet1:Samsung"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "iPhone"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "check",
-                                            "params": {
-                                                "widget": "CheckBox",
-                                                "id": "FieldSet example:FieldSet1:iPhone"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "HTC"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "check",
-                                            "params": {
-                                                "widget": "CheckBox",
-                                                "id": "FieldSet example:FieldSet1:HTC"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "Nokia"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "check",
-                                            "params": {
-                                                "widget": "CheckBox",
-                                                "id": "FieldSet example:FieldSet1:Nokia"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                }
-                            ],
-                            "properties": []
-                        },
-                        {
-                            "widget": "Text",
-                            "id": "is it used or not",
-                            "actions": [
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "Used"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "switch on",
-                                            "params": {
-                                                "widget": "ToggleButton",
-                                                "id": "FieldSet example:FieldSet1:Used"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "settext",
-                                    "params": {
-                                        "value": "Not used"
-                                    },
-                                    "negated": false,
-                                    "conditions": [
-                                        {
-                                            "type": "switch off",
-                                            "params": {
-                                                "widget": "ToggleButton",
-                                                "id": "FieldSet example:FieldSet1:Used"
-                                            },
-                                            "negated": false
-                                        }
-                                    ]
-                                }
-                            ],
-                            "properties": []
-                        }
-                    ]
+[
+    {
+      "action": {
+        "type": "CONDITIONAL",
+        "conditionalBlocks": [
+          {
+            "actions": [
+              {
+                "type": "SET_VARIABLE",
+                "variableId": "VariableID:2103:1398",
+                "variableValue": {
+                  "value": true,
+                  "type": "BOOLEAN",
+                  "resolvedType": "BOOLEAN"
                 }
+              }
             ],
-            "actions": []
+            "condition": {
+              "value": {
+                "expressionArguments": [
+                  {
+                    "value": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2103:1398"
+                    },
+                    "type": "VARIABLE_ALIAS",
+                    "resolvedType": "BOOLEAN"
+                  },
+                  {
+                    "value": false,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                ],
+                "expressionFunction": "EQUALS"
+              },
+              "type": "EXPRESSION",
+              "resolvedType": "BOOLEAN"
+            }
+          },
+          {
+            "actions": [
+              {
+                "type": "SET_VARIABLE",
+                "variableId": "VariableID:2103:1398",
+                "variableValue": {
+                  "value": false,
+                  "type": "BOOLEAN",
+                  "resolvedType": "BOOLEAN"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "CONDITIONAL",
+          "conditionalBlocks": [
+            {
+              "actions": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variableId": "VariableID:2103:1398",
+                  "variableValue": {
+                    "value": true,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                }
+              ],
+              "condition": {
+                "value": {
+                  "expressionArguments": [
+                    {
+                      "value": {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2103:1398"
+                      },
+                      "type": "VARIABLE_ALIAS",
+                      "resolvedType": "BOOLEAN"
+                    },
+                    {
+                      "value": false,
+                      "type": "BOOLEAN",
+                      "resolvedType": "BOOLEAN"
+                    }
+                  ],
+                  "expressionFunction": "EQUALS"
+                },
+                "type": "EXPRESSION",
+                "resolvedType": "BOOLEAN"
+              }
+            },
+            {
+              "actions": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variableId": "VariableID:2103:1398",
+                  "variableValue": {
+                    "value": false,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "CONDITIONAL",
+          "conditionalBlocks": [
+            {
+              "actions": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variableId": "VariableID:2103:1413",
+                  "variableValue": {
+                    "value": false,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                }
+              ],
+              "condition": {
+                "value": {
+                  "expressionArguments": [
+                    {
+                      "value": {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2103:1413"
+                      },
+                      "type": "VARIABLE_ALIAS",
+                      "resolvedType": "BOOLEAN"
+                    },
+                    {
+                      "value": true,
+                      "type": "BOOLEAN",
+                      "resolvedType": "BOOLEAN"
+                    }
+                  ],
+                  "expressionFunction": "EQUALS"
+                },
+                "type": "EXPRESSION",
+                "resolvedType": "BOOLEAN"
+              }
+            },
+            {
+              "actions": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variableId": "VariableID:2103:1413",
+                  "variableValue": {
+                    "value": true,
+                    "type": "BOOLEAN",
+                    "resolvedType": "BOOLEAN"
+                  }
+                }
+              ]
+            }
+          ]
         }
-    ]
-}
+      ],
+      "trigger": {
+        "type": "ON_CLICK"
+      }
+    }
+  ]
