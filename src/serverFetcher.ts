@@ -1,4 +1,9 @@
-import { callFunctionByName, resetAllPositions, layoutPages, applyActions } from "./widgets";
+import { callFunctionByName, resetAllPositions, layoutPages, getVariableCollection } from "./widgets";
+import { WidgetStateReactionsBuilder } from "./widgetStateReactionBuilder";
+
+let widgetStateReactionBuilder: WidgetStateReactionsBuilder | null = null;
+
+let containerID = "";
 
 
 export function pollServer(lastPolledTime = Date.now()) {
@@ -88,10 +93,11 @@ async function loopData(data: string): Promise<void> {
         }
         layoutPages(); // Call layoutPages after all the asynchronous operations have completed
         resetAllPositions();
+        widgetStateReactionBuilder = new WidgetStateReactionsBuilder(getVariableCollection());
 
         for (const window of jsonData.BrowserWindows) {
             console.log(window.page);
-            processWidgetActions(window);
+            processWidgetActions(window.page, window);
         }
         //applyActions();
     } catch (error) {
@@ -99,18 +105,24 @@ async function loopData(data: string): Promise<void> {
     }
 }
 
-function processWidgetActions(widget: any) {
+function processWidgetActions(page: string, widget: any) {
     // Check if the widget has actions and pass them to handleWidgetActions
     if (widget.actions && widget.actions.length > 0) {
         //handleWidgetActions(widget.actions);
-        console.log(widget.id);
-        console.log(widget.actions);
+        let id = page + ":" + containerID + widget.id
+        widget.actions.forEach((action: any) => {
+            if (widgetStateReactionBuilder != null) {
+                widgetStateReactionBuilder.buildAction(id, action, widget.widget);
+            }
+        });
     }
 
     // Check if the widget has a nested list of widgets and recurse through them
     if (widget.widgets && widget.widgets.length > 0) {
-        widget.widgets.forEach((nestedWidget: any) => processWidgetActions(nestedWidget));
+        containerID = widget.id + ":"
+        widget.widgets.forEach((nestedWidget: any) => processWidgetActions(page, nestedWidget));
     }
+    containerID = "";
 }
 
 function printNodeReactions(node: any) {

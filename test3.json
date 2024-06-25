@@ -1,115 +1,372 @@
-[
-    {
-      "action": {
-        "type": "CONDITIONAL",
-        "conditionalBlocks": [
-          {
-            "actions": [
-              {
-                "type": "SET_VARIABLE",
-                "variableId": "VariableID:2093:827",
-                "variableValue": {
-                  "value": true,
-                  "type": "BOOLEAN",
-                  "resolvedType": "BOOLEAN"
-                }
-              }
-            ],
-            "condition": {
-              "value": {
-                "expressionArguments": [
-                  {
-                    "value": {
-                      "type": "VARIABLE_ALIAS",
-                      "id": "VariableID:2093:827"
-                    },
-                    "type": "VARIABLE_ALIAS",
-                    "resolvedType": "BOOLEAN"
-                  },
-                  {
-                    "value": false,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                ],
-                "expressionFunction": "EQUALS"
-              },
-              "type": "EXPRESSION",
-              "resolvedType": "BOOLEAN"
-            }
-          },
-          {
-            "actions": [
-              {
-                "type": "SET_VARIABLE",
-                "variableId": "VariableID:2093:827",
-                "variableValue": {
-                  "value": false,
-                  "type": "BOOLEAN",
-                  "resolvedType": "BOOLEAN"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "actions": [
+{
+    "BrowserWindows": [
         {
-          "type": "CONDITIONAL",
-          "conditionalBlocks": [
-            {
-              "actions": [
+            "page": "TestPage",
+            "widgets": [
                 {
-                  "type": "SET_VARIABLE",
-                  "variableId": "VariableID:2093:827",
-                  "variableValue": {
-                    "value": true,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                }
-              ],
-              "condition": {
-                "value": {
-                  "expressionArguments": [
-                    {
-                      "value": {
-                        "type": "VARIABLE_ALIAS",
-                        "id": "VariableID:2093:827"
-                      },
-                      "type": "VARIABLE_ALIAS",
-                      "resolvedType": "BOOLEAN"
-                    },
-                    {
-                      "value": false,
-                      "type": "BOOLEAN",
-                      "resolvedType": "BOOLEAN"
-                    }
-                  ],
-                  "expressionFunction": "EQUALS"
+                    "widget": "FieldSet",
+                    "id": "FieldSet",
+                    "actions": [],
+                    "properties": [],
+                    "widgets": [
+                        {
+                            "widget": "Text",
+                            "id": "text2",
+                            "actions": [],
+                            "properties": [
+                                {
+                                    "text": "hehe jeet"
+                                }
+                            ]
+                        },
+                        {
+                            "widget": "Text",
+                            "id": "text23",
+                            "actions": [],
+                            "properties": [
+                                {
+                                    "text": "hehe jeets"
+                                }
+                            ]
+                        }
+                    ]
                 },
-                "type": "EXPRESSION",
-                "resolvedType": "BOOLEAN"
-              }
-            },
-            {
-              "actions": [
                 {
-                  "type": "SET_VARIABLE",
-                  "variableId": "VariableID:2093:827",
-                  "variableValue": {
-                    "value": false,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
+                    "widget": "Text",
+                    "id": "text",
+                    "actions": [],
+                    "properties": [
+                        {
+                            "text": "yes"
+                        }
+                    ]
+                },
+                {
+                    "widget": "SearchBox",
+                    "id": "SearchBox",
+                    "actions": [
+                        {
+                            "type": "setvalue",
+                            "params": {
+                                "value": "not used"
+                            },
+                            "negated": false,
+                            "conditions": [
+                                {
+                                    "type": "shown",
+                                    "params": {
+                                        "widget": "BrowserWindow",
+                                        "id": "null:TestPage"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage:FieldSet:text2",
+                                        "value": "hehe jeet"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage:FieldSet:text23",
+                                        "value": "hehe jeets"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage:FieldSet:text23",
+                                        "value": "hehe jeetssd"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "shown",
+                                    "params": {
+                                        "widget": "FieldSet",
+                                        "id": "TestPage:FieldSet:FieldSet"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage:text",
+                                        "value": "yes"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage:text",
+                                        "value": "yes2"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "valueIs",
+                                    "params": {
+                                        "widget": "SearchBox",
+                                        "id": "TestPage:SearchBox",
+                                        "value": "Used"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "click",
+                                    "params": {
+                                        "widget": "Button",
+                                        "id": "TestPage:Search"
+                                    },
+                                    "negated": false
+                                }
+                            ]
+                        }
+                    ],
+                    "properties": []
+                },
+                {
+                    "widget": "Button",
+                    "id": "Search",
+                    "actions": [],
+                    "properties": []
                 }
-              ]
-            }
-          ]
+            ],
+            "actions": []
+        },
+        {
+            "page": "TestPage2",
+            "widgets": [
+                {
+                    "widget": "Text",
+                    "id": "text2",
+                    "actions": [],
+                    "properties": [
+                        {
+                            "text": "test2123123"
+                        }
+                    ]
+                },
+                {
+                    "widget": "FieldSet",
+                    "id": "FieldSet",
+                    "actions": [],
+                    "properties": [],
+                    "widgets": [
+                        {
+                            "widget": "Text",
+                            "id": "text23",
+                            "actions": [],
+                            "properties": [
+                                {
+                                    "text": "test23"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "widget": "SearchBox",
+                    "id": "SearchBox",
+                    "actions": [
+                        {
+                            "type": "setvalue",
+                            "params": {
+                                "value": "not used"
+                            },
+                            "negated": false,
+                            "conditions": [
+                                {
+                                    "type": "shown",
+                                    "params": {
+                                        "widget": "BrowserWindow",
+                                        "id": "null:TestPage2"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage2:text2",
+                                        "value": "test2123123"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage2:text2",
+                                        "value": "test2"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "textIs",
+                                    "params": {
+                                        "widget": "Text",
+                                        "id": "TestPage2:FieldSet:text23",
+                                        "value": "test23"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "valueIs",
+                                    "params": {
+                                        "widget": "SearchBox",
+                                        "id": "TestPage2:SearchBox",
+                                        "value": "Used"
+                                    },
+                                    "negated": false
+                                },
+                                {
+                                    "type": "click",
+                                    "params": {
+                                        "widget": "Button",
+                                        "id": "TestPage2:Search"
+                                    },
+                                    "negated": false
+                                }
+                            ]
+                        }
+                    ],
+                    "properties": []
+                },
+                {
+                    "widget": "Button",
+                    "id": "Search",
+                    "actions": [],
+                    "properties": []
+                }
+            ],
+            "actions": []
+        },
+        {
+            "page": "TestPage3",
+            "widgets": [
+                {
+                    "widget": "Text",
+                    "id": "text2",
+                    "actions": [],
+                    "properties": [
+                        {
+                            "text": "test2123123"
+                        }
+                    ]
+                },
+                {
+                    "widget": "FieldSet",
+                    "id": "FieldSet",
+                    "actions": [],
+                    "properties": [],
+                    "widgets": [
+                        {
+                            "widget": "Text",
+                            "id": "text23",
+                            "actions": [],
+                            "properties": [
+                                {
+                                    "text": "test23"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "widget": "FieldSet",
+                    "id": "FieldSet2",
+                    "actions": [],
+                    "properties": [],
+                    "widgets": [
+                        {
+                            "widget": "SearchBox",
+                            "id": "SearchBox",
+                            "actions": [
+                                {
+                                    "type": "setvalue",
+                                    "params": {
+                                        "value": "not used"
+                                    },
+                                    "negated": false,
+                                    "conditions": [
+                                        {
+                                            "type": "shown",
+                                            "params": {
+                                                "widget": "BrowserWindow",
+                                                "id": "null:TestPage3"
+                                            },
+                                            "negated": false
+                                        },
+                                        {
+                                            "type": "textIs",
+                                            "params": {
+                                                "widget": "Text",
+                                                "id": "TestPage3:text2",
+                                                "value": "test2123123"
+                                            },
+                                            "negated": false
+                                        },
+                                        {
+                                            "type": "textIs",
+                                            "params": {
+                                                "widget": "Text",
+                                                "id": "TestPage3:text2",
+                                                "value": "test2"
+                                            },
+                                            "negated": false
+                                        },
+                                        {
+                                            "type": "textIs",
+                                            "params": {
+                                                "widget": "Text",
+                                                "id": "TestPage3:FieldSet:text23",
+                                                "value": "test23"
+                                            },
+                                            "negated": false
+                                        },
+                                        {
+                                            "type": "valueIs",
+                                            "params": {
+                                                "widget": "SearchBox",
+                                                "id": "TestPage3:FieldSet2:SearchBox",
+                                                "value": "Used"
+                                            },
+                                            "negated": false
+                                        },
+                                        {
+                                            "type": "click",
+                                            "params": {
+                                                "widget": "Button",
+                                                "id": "TestPage3:Search"
+                                            },
+                                            "negated": false
+                                        }
+                                    ]
+                                }
+                            ],
+                            "properties": []
+                        }
+                    ]
+                },
+                {
+                    "widget": "Button",
+                    "id": "Search",
+                    "actions": [],
+                    "properties": []
+                }
+            ],
+            "actions": []
         }
-      ],
-      "trigger": {
-        "type": "ON_CLICK"
-      }
-    }
-  ]
+    ]
+}

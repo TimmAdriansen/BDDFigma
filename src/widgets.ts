@@ -1,8 +1,6 @@
 import { WidgetReactions } from "./widgetReactions";
-import { WidgetStateReactionsBuilder } from "./widgetStateReactionBuilder";
 
 let widgetReactions = new WidgetReactions();
-let widgetStateReactions = new WidgetStateReactionsBuilder();
 
 type FunctionMap = {
     [key: string]: (...args: any[]) => Promise<InstanceNode | null>;
@@ -24,7 +22,7 @@ const frameSize = { x: 1200, y: 900 };
 let framePos = { x: 0, y: 0 };
 let allPositions: Position[] = [];
 
-let containerID: string | null = null;
+let containerID: string = "";
 let count = 0;
 
 async function button(page: string, id: string): Promise<InstanceNode | null> {
@@ -81,7 +79,7 @@ async function button(page: string, id: string): Promise<InstanceNode | null> {
         }
     }*/
 
-    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         newComponent.remove();
@@ -181,18 +179,17 @@ async function textField(page: string, id: string): Promise<InstanceNode | null>
 
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id + ":var:";
+        let name = page + ":" + containerID + id + ":var:" + "value";
 
         const textVar = figma.variables.createVariable(name, collection.id, "STRING");
 
         let startString = "Type here";
 
-        // Assuming getTypingReactions is a function that you have that configures reactions based on the text variable
         reactions = widgetReactions.getTypingReactions(textVar.id, startString, reactions);
 
         specificVariant.reactions = reactions;
 
-        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant, page);
 
         if (newInstance) {
             const textNode = newInstance.findOne(child => child.name === 'Text' && child.type === 'TEXT') as TextNode;
@@ -249,7 +246,7 @@ async function searchBox(page: string, id: string): Promise<InstanceNode | null>
 
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id + ":var:";
+        let name = page + ":" + containerID + id + ":var:" + "value";
 
         const textVar = figma.variables.createVariable(name, collection.id, "STRING");
 
@@ -259,7 +256,7 @@ async function searchBox(page: string, id: string): Promise<InstanceNode | null>
 
         specificVariant.reactions = reactions;
 
-        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant, page);
 
         if (newInstance) {
             const textNode = newInstance.findOne(child => child.name === 'Text' && child.type === 'TEXT') as TextNode;
@@ -314,7 +311,7 @@ async function radioButton(page: string, id: string): Promise<InstanceNode | nul
     if (specificVariant) {
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id + ":var:" + "value";
+        let name = page + ":" + containerID + id + ":var:" + "value";
 
         const boolVar = figma.variables.createVariable(name, collection.id, "BOOLEAN");
 
@@ -322,7 +319,7 @@ async function radioButton(page: string, id: string): Promise<InstanceNode | nul
 
         specificVariant.reactions = reactions;
 
-        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant, page);
 
         if (newInstance) {
 
@@ -371,7 +368,7 @@ async function toggleButton(page: string, id: string): Promise<InstanceNode | nu
     if (specificVariant) {
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id + ":var:" + "value";
+        let name = page + ":" + containerID + id + ":var:" + "value";
 
         const boolVar = figma.variables.createVariable(name, collection.id, "BOOLEAN");
 
@@ -379,7 +376,7 @@ async function toggleButton(page: string, id: string): Promise<InstanceNode | nu
 
         specificVariant.reactions = reactions;
 
-        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant, page);
 
         if (newInstance) {
 
@@ -408,7 +405,7 @@ async function checkBox(page: string, id: string): Promise<InstanceNode | null> 
     if (!component) {
         return null;
     }
-    
+
     let newComponent = component.clone()
     newComponent.name = "toDelete"
 
@@ -428,7 +425,7 @@ async function checkBox(page: string, id: string): Promise<InstanceNode | null> 
     if (specificVariant) {
         let reactions = clone(specificVariant.reactions);
 
-        let name = page + ":" + id + ":var:" + "value";
+        let name = page + ":" + containerID + id + ":var:" + "value";
 
         const boolVar = figma.variables.createVariable(name, collection.id, "BOOLEAN");
 
@@ -436,7 +433,7 @@ async function checkBox(page: string, id: string): Promise<InstanceNode | null> 
 
         specificVariant.reactions = reactions;
 
-        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant);
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, specificVariant, page);
 
         if (newInstance) {
 
@@ -462,7 +459,7 @@ async function image(page: string, id: string): Promise<InstanceNode | null> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance
@@ -476,7 +473,7 @@ async function calendar(page: string, id: string): Promise<InstanceNode | null> 
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance
@@ -490,7 +487,7 @@ async function timePicker(page: string, id: string): Promise<InstanceNode | null
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance
@@ -504,7 +501,7 @@ async function icon(page: string, id: string): Promise<InstanceNode | null> {
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance
@@ -517,7 +514,7 @@ async function fieldSet(page: string, id: string, widgets: any[]): Promise<Insta
     const component = findComponentSetByName("InteractionFieldSet");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    if (currentFrame) containerID = currentFrame.name + ":" + id;
+    if (currentFrame) containerID = id + ":";
 
     if (!component) {
         return null;
@@ -543,9 +540,9 @@ async function fieldSet(page: string, id: string, widgets: any[]): Promise<Insta
             }
         }
 
-        containerID = null;
+        containerID = "";
 
-        const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+        const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
 
         newComponent.remove();
 
@@ -579,7 +576,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
         }
     }
 
-    let name = page + ":" + id + ":var:";
+    let name = page + ":" + containerID + id + ":var:" + "value";
 
     const textVar = figma.variables.createVariable(name, collection.id, "STRING");
 
@@ -669,7 +666,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
         }
     }
 
-    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         const textNode = newInstance.findOne(child => child.name === 'Text' && child.type === 'TEXT') as TextNode;
@@ -750,8 +747,7 @@ async function listBox(page: string, id: string, widgets: any[]): Promise<Instan
     }
 
 
-
-    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         await setTextOfInstance(newInstance, id);
@@ -825,7 +821,7 @@ async function menu(page: string, id: string, widgets: any[]): Promise<InstanceN
     }
 
 
-    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
 
@@ -842,7 +838,7 @@ async function accordion(page: string, id: string): Promise<InstanceNode | null>
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance;
@@ -856,7 +852,7 @@ async function breadcrumb(page: string, id: string): Promise<InstanceNode | null
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance;
@@ -889,11 +885,11 @@ async function numericStepper(page: string, id: string): Promise<InstanceNode | 
         }
     }
 
-    let nameFloat = page + ":" + id + ":var:" + "float";
+    let nameFloat = page + ":" + containerID + id + ":var:" + "float";
 
     const floatVar = figma.variables.createVariable(nameFloat, collection.id, "FLOAT");
 
-    let nameString = page + ":" + id + ":var:" + "string";
+    let nameString = page + ":" + containerID + id + ":var:" + "string";
 
     const stringVar = figma.variables.createVariable(nameString, collection.id, "STRING");
 
@@ -915,7 +911,7 @@ async function numericStepper(page: string, id: string): Promise<InstanceNode | 
     }
 
 
-    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         const textNode = newInstance.findOne(child => child.name === 'value' && child.type === 'TEXT') as TextNode;
@@ -969,9 +965,9 @@ async function modalWindow(page: string, id: string, widgets: any[]): Promise<In
             }
         }
 
-        containerID = null;
+        containerID = "";
 
-        const newInstance = createInstanceFromSet(newComponent, null, startOffset, gridSpacing, id, null);
+        const newInstance = createInstanceFromSet(newComponent, null, startOffset, gridSpacing, id, null, page);
 
 
         if (newInstance) {
@@ -1007,7 +1003,7 @@ async function windowDialog(page: string, id: string): Promise<InstanceNode | nu
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance;
@@ -1021,7 +1017,7 @@ async function notification(page: string, id: string): Promise<InstanceNode | nu
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
 
     if (newInstance) {
         return newInstance;
@@ -1035,20 +1031,51 @@ async function text(page: string, id: string, properties: any[]): Promise<Instan
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
-
-    let text;
-
-    if (properties.length > 0) {
-        text = properties[0].text;
-    } else {
-        text = id;
+    if (!component) {
+        return null;
     }
 
-    if (newInstance) {
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
 
-        await setTextOfInstance(newInstance, text);
-        return newInstance;
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
+
+    figma.currentPage.appendChild(newComponent);
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+        let name = page + ":" + containerID + id + ":var:" + "value";
+
+        const textVar = figma.variables.createVariable(name, collection.id, "STRING");
+
+        let startString;
+
+        if (properties.length > 0) {
+            startString = properties[0].text;
+        } else {
+            startString = id;
+        }
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
+
+        if (newInstance) {
+            newComponent.remove();
+            const textNode = newInstance.findOne(child => child.name === 'Label' && child.type === 'TEXT') as TextNode;
+            if (textNode) {
+                textVar.setValueForMode(modeId, startString);
+                textNode.setBoundVariable('characters', textVar.id);
+            }
+            return newInstance;
+        }
+
     }
 
     return null;
@@ -1059,22 +1086,51 @@ async function label(page: string, id: string, properties: any[]): Promise<Insta
 
     let currentFrame: FrameNode | null = findFrameByName(page);
 
-    let text;
-
-    //console.log(properties);
-
-    if (properties.length > 0) {
-        text = properties[0].text;
-    } else {
-        text = id;
+    if (!component) {
+        return null;
     }
 
-    const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null);
+    let newComponent = component.clone()
+    newComponent.name = "toDelete"
 
-    if (newInstance) {
+    newComponent.x = 100000000;
+    newComponent.y = 100000000;
 
-        await setTextOfInstance(newInstance, text);
-        return newInstance;
+    figma.currentPage.appendChild(newComponent);
+
+    let specificVariant = null;
+
+    for (const variant of newComponent.children) {
+        if (variant.type === "COMPONENT" && variant.name.includes("Default")) {
+            specificVariant = variant;
+        }
+    }
+
+    if (specificVariant) {
+        let name = page + ":" + containerID + id + ":var:" + "value";
+
+        const textVar = figma.variables.createVariable(name, collection.id, "STRING");
+
+        let startString;
+
+        if (properties.length > 0) {
+            startString = properties[0].text;
+        } else {
+            startString = id;
+        }
+
+        const newInstance = createInstanceFromSet(component, currentFrame, startOffset, gridSpacing, id, null, page);
+
+        if (newInstance) {
+            newComponent.remove();
+            const textNode = newInstance.findOne(child => child.name === 'Label' && child.type === 'TEXT') as TextNode;
+            if (textNode) {
+                textVar.setValueForMode(modeId, startString);
+                textNode.setBoundVariable('characters', textVar.id);
+            }
+            return newInstance;
+        }
+
     }
 
     return null;
@@ -1114,6 +1170,10 @@ export async function callFunctionByName(functionName: string, params: any[] = [
         console.log("Function not found for:", functionName);
         return null;
     }
+}
+
+export function getVariableCollection(){
+    return collection;
 }
 
 //callFunctionByName("button");
@@ -1159,7 +1219,7 @@ function findInstanceByName(instanceName: string): InstanceNode | null {
     return foundInstance;
 }
 
-function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }, id: string, variant: ComponentNode | null): InstanceNode | null {
+function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFrame: FrameNode | null, startOffset: { x: number, y: number }, gridSpacing: { x: number, y: number }, id: string, variant: ComponentNode | null, page: string): InstanceNode | null {
     if (!componentSet) {
         console.error("Component set not found.");
         return null;
@@ -1204,7 +1264,7 @@ function createInstanceFromSet(componentSet: ComponentSetNode | null, targetFram
 
         targetFrame.appendChild(instance);
     } else {
-        instance.name = containerID + ":" + id;
+        instance.name = page + ":" + containerID + id;
     }
 
     return instance;
@@ -1290,7 +1350,7 @@ function clone(val: any) {
     return JSON.parse(JSON.stringify(val))
 }
 
-export function applyActions() {
+/*export function applyActions() {
     const button = findInstanceByName("ModalWindowTest:button3");
     console.log(button);
     const modalWindow = findFrameByName("ModalWindowTest:mWindow");
@@ -1303,4 +1363,4 @@ export function applyActions() {
     }
 
 
-}
+}*/

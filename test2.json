@@ -1,168 +1,70 @@
 [
     {
-      "action": {
-        "type": "CONDITIONAL",
-        "conditionalBlocks": [
-          {
-            "actions": [
-              {
-                "type": "SET_VARIABLE",
-                "variableId": "VariableID:2103:1398",
-                "variableValue": {
-                  "value": true,
-                  "type": "BOOLEAN",
-                  "resolvedType": "BOOLEAN"
-                }
-              }
-            ],
-            "condition": {
-              "value": {
-                "expressionArguments": [
-                  {
-                    "value": {
-                      "type": "VARIABLE_ALIAS",
-                      "id": "VariableID:2103:1398"
-                    },
-                    "type": "VARIABLE_ALIAS",
-                    "resolvedType": "BOOLEAN"
-                  },
-                  {
-                    "value": false,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                ],
-                "expressionFunction": "EQUALS"
-              },
-              "type": "EXPRESSION",
-              "resolvedType": "BOOLEAN"
-            }
-          },
-          {
-            "actions": [
-              {
-                "type": "SET_VARIABLE",
-                "variableId": "VariableID:2103:1398",
-                "variableValue": {
-                  "value": false,
-                  "type": "BOOLEAN",
-                  "resolvedType": "BOOLEAN"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "actions": [
-        {
-          "type": "CONDITIONAL",
-          "conditionalBlocks": [
-            {
-              "actions": [
-                {
-                  "type": "SET_VARIABLE",
-                  "variableId": "VariableID:2103:1398",
-                  "variableValue": {
-                    "value": true,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                }
-              ],
-              "condition": {
-                "value": {
-                  "expressionArguments": [
-                    {
-                      "value": {
-                        "type": "VARIABLE_ALIAS",
-                        "id": "VariableID:2103:1398"
-                      },
-                      "type": "VARIABLE_ALIAS",
-                      "resolvedType": "BOOLEAN"
-                    },
-                    {
-                      "value": false,
-                      "type": "BOOLEAN",
-                      "resolvedType": "BOOLEAN"
-                    }
-                  ],
-                  "expressionFunction": "EQUALS"
-                },
-                "type": "EXPRESSION",
-                "resolvedType": "BOOLEAN"
-              }
-            },
-            {
-              "actions": [
-                {
-                  "type": "SET_VARIABLE",
-                  "variableId": "VariableID:2103:1398",
-                  "variableValue": {
-                    "value": false,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                }
-              ]
-            }
-          ]
+        "type": "settext",
+        "params": {
+            "value": "Samsung"
         },
-        {
-          "type": "CONDITIONAL",
-          "conditionalBlocks": [
+        "negated": false,
+        "conditions": [
             {
-              "actions": [
-                {
-                  "type": "SET_VARIABLE",
-                  "variableId": "VariableID:2103:1413",
-                  "variableValue": {
-                    "value": false,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                }
-              ],
-              "condition": {
-                "value": {
-                  "expressionArguments": [
-                    {
-                      "value": {
-                        "type": "VARIABLE_ALIAS",
-                        "id": "VariableID:2103:1413"
-                      },
-                      "type": "VARIABLE_ALIAS",
-                      "resolvedType": "BOOLEAN"
-                    },
-                    {
-                      "value": true,
-                      "type": "BOOLEAN",
-                      "resolvedType": "BOOLEAN"
-                    }
-                  ],
-                  "expressionFunction": "EQUALS"
+                "type": "pick",
+                "params": {
+                    "widget": "RadioButton",
+                    "id": "FieldSet example:FieldSet1:Samsung"
                 },
-                "type": "EXPRESSION",
-                "resolvedType": "BOOLEAN"
-              }
-            },
-            {
-              "actions": [
-                {
-                  "type": "SET_VARIABLE",
-                  "variableId": "VariableID:2103:1413",
-                  "variableValue": {
-                    "value": true,
-                    "type": "BOOLEAN",
-                    "resolvedType": "BOOLEAN"
-                  }
-                }
-              ]
+                "negated": false
             }
-          ]
-        }
-      ],
-      "trigger": {
-        "type": "ON_CLICK"
-      }
+        ]
+    },
+    {
+        "type": "settext",
+        "params": {
+            "value": "iPhone"
+        },
+        "negated": false,
+        "conditions": [
+            {
+                "type": "pick",
+                "params": {
+                    "widget": "RadioButton",
+                    "id": "FieldSet example:FieldSet1:iPhone"
+                },
+                "negated": false
+            }
+        ]
+    },
+    {
+        "type": "settext",
+        "params": {
+            "value": "HTC"
+        },
+        "negated": false,
+        "conditions": [
+            {
+                "type": "pick",
+                "params": {
+                    "widget": "RadioButton",
+                    "id": "FieldSet example:FieldSet1:HTC"
+                },
+                "negated": false
+            }
+        ]
+    },
+    {
+        "type": "settext",
+        "params": {
+            "value": "Nokia"
+        },
+        "negated": false,
+        "conditions": [
+            {
+                "type": "pick",
+                "params": {
+                    "widget": "RadioButton",
+                    "id": "FieldSet example:FieldSet1:Nokia"
+                },
+                "negated": false
+            }
+        ]
     }
-  ]
+]
