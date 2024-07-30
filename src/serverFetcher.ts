@@ -3,8 +3,6 @@ import { WidgetStateReactionsBuilder } from "./widgetStateReactionBuilder";
 
 let widgetStateReactionBuilder: WidgetStateReactionsBuilder | null = null;
 
-let containerID = "";
-
 
 export function pollServer(lastPolledTime = Date.now()) {
     const url = `http://localhost:3000/xmlRequest?lastPolled=${lastPolledTime}`;
@@ -96,7 +94,7 @@ async function loopData(data: string): Promise<void> {
         widgetStateReactionBuilder = new WidgetStateReactionsBuilder(getVariableCollection());
 
         for (const window of jsonData.BrowserWindows) {
-            console.log(window.page);
+            //console.log(window.page);
             processWidgetActions(window.page, window);
         }
         //applyActions();
@@ -105,11 +103,13 @@ async function loopData(data: string): Promise<void> {
     }
 }
 
-function processWidgetActions(page: string, widget: any) {
+function processWidgetActions(page: string, widget: any, containerID = "") {
     // Check if the widget has actions and pass them to handleWidgetActions
     if (widget.actions && widget.actions.length > 0) {
         //handleWidgetActions(widget.actions);
         let id = page + ":" + containerID + widget.id
+        if (containerID != "") {
+        }
         widget.actions.forEach((action: any) => {
             if (widgetStateReactionBuilder != null) {
                 widgetStateReactionBuilder.buildAction(id, action, widget.widget);
@@ -119,10 +119,12 @@ function processWidgetActions(page: string, widget: any) {
 
     // Check if the widget has a nested list of widgets and recurse through them
     if (widget.widgets && widget.widgets.length > 0) {
-        containerID = widget.id + ":"
-        widget.widgets.forEach((nestedWidget: any) => processWidgetActions(page, nestedWidget));
+        let parentContainerID = "";
+        if (!widget.page) {
+            parentContainerID = containerID + widget.id + ":"
+        }
+        widget.widgets.forEach((nestedWidget: any) => processWidgetActions(page, nestedWidget, parentContainerID));
     }
-    containerID = "";
 }
 
 function printNodeReactions(node: any) {

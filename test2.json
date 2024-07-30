@@ -1,70 +1,575 @@
-[
+{
+  "BrowserWindows": [
     {
-        "type": "settext",
-        "params": {
-            "value": "Samsung"
+      "page": "Login Page",
+      "widgets": [
+        {
+          "widget": "TextField",
+          "id": "Username",
+          "actions": [],
+          "properties": []
         },
-        "negated": false,
-        "conditions": [
+        {
+          "widget": "TextField",
+          "id": "Password",
+          "actions": [],
+          "properties": []
+        },
+        {
+          "widget": "Button",
+          "id": "Login",
+          "actions": [],
+          "properties": []
+        }
+      ],
+      "actions": []
+    },
+    {
+      "page": "Home Page",
+      "widgets": [
+        {
+          "widget": "DropdownList",
+          "id": "City picker",
+          "actions": [],
+          "properties": [],
+          "widgets": [
             {
-                "type": "pick",
-                "params": {
-                    "widget": "RadioButton",
+              "widget": "Button",
+              "id": "Ølstykke",
+              "actions": [],
+              "properties": []
+            },
+            {
+              "widget": "Button",
+              "id": "Odense",
+              "actions": [],
+              "properties": []
+            },
+            {
+              "widget": "Button",
+              "id": "Århus",
+              "actions": [],
+              "properties": []
+            }
+          ]
+        },
+        {
+          "widget": "Label",
+          "id": "Chosen city",
+          "actions": [
+            {
+              "type": "SET_VARIABLE:text",
+              "params": {
+                "value": "Ølstykke"
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "type": "displayed",
+                  "params": {
+                    "widget": "BrowserWindow",
+                    "id": "null:Home Page"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "click",
+                  "params": {
+                    "widget": "Button",
+                    "id": "Home Page:City picker:Ølstykke"
+                  },
+                  "negated": false
+                }
+              ]
+            },
+            {
+              "type": "SET_VARIABLE:text",
+              "params": {
+                "value": "Odense"
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "type": "displayed",
+                  "params": {
+                    "widget": "BrowserWindow",
+                    "id": "null:Home Page"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "click",
+                  "params": {
+                    "widget": "Button",
+                    "id": "Home Page:City picker:Odense"
+                  },
+                  "negated": false
+                }
+              ]
+            },
+            {
+              "type": "SET_VARIABLE:text",
+              "params": {
+                "value": "Århus"
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "type": "displayed",
+                  "params": {
+                    "widget": "BrowserWindow",
+                    "id": "null:Home Page"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "click",
+                  "params": {
+                    "widget": "Button",
+                    "id": "Home Page:City picker:Århus"
+                  },
+                  "negated": false
+                }
+              ]
+            }
+          ],
+          "properties": []
+        }
+      ],
+      "actions": [
+        {
+          "type": "displayed",
+          "params": {},
+          "negated": false,
+          "conditions": [
+            {
+              "type": "displayed",
+              "params": {
+                "widget": "BrowserWindow",
+                "id": "null:Login Page"
+              },
+              "negated": false
+            },
+            {
+              "type": "valueIs",
+              "params": {
+                "widget": "TextField",
+                "id": "Login Page:Username",
+                "value": ""
+              },
+              "negated": true
+            },
+            {
+              "type": "valueIs",
+              "params": {
+                "widget": "TextField",
+                "id": "Login Page:Password",
+                "value": ""
+              },
+              "negated": true
+            },
+            {
+              "type": "click",
+              "params": {
+                "widget": "Button",
+                "id": "Login Page:Login"
+              },
+              "negated": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page": "FieldSet example",
+      "widgets": [
+        {
+          "widget": "FieldSet",
+          "id": "FieldSet1",
+          "actions": [],
+          "properties": [],
+          "widgets": [
+            {
+              "widget": "Label",
+              "id": "Header",
+              "actions": [],
+              "properties": [
+                {
+                  "text": "Option selector"
+                }
+              ]
+            },
+            {
+              "widget": "Text",
+              "id": "BodyText",
+              "actions": [],
+              "properties": [
+                {
+                  "text": "You can choose one of the following phones:"
+                }
+              ]
+            },
+            {
+              "widget": "CheckBox",
+              "id": "Samsung",
+              "actions": [],
+              "properties": []
+            },
+            {
+              "widget": "CheckBox",
+              "id": "iPhone",
+              "actions": [],
+              "properties": []
+            },
+            {
+              "widget": "CheckBox",
+              "id": "HTC",
+              "actions": [],
+              "properties": []
+            },
+            {
+              "widget": "CheckBox",
+              "id": "Nokia",
+              "actions": [],
+              "properties": []
+            },
+            {
+              "widget": "ToggleButton",
+              "id": "Used",
+              "actions": [],
+              "properties": []
+            }
+          ]
+        },
+        {
+          "widget": "ModalWindow",
+          "id": "ChosenPhoneModal",
+          "actions": [
+            {
+              "type": "displayed",
+              "params": {},
+              "negated": false,
+              "conditions": [
+                {
+                  "type": "shown",
+                  "params": {
+                    "widget": "BrowserWindow",
+                    "id": "null:FieldSet example"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "textIs",
+                  "params": {
+                    "widget": "Label",
+                    "id": "FieldSet example:FieldSet1:Header",
+                    "value": "Option selector"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "textIs",
+                  "params": {
+                    "widget": "Text",
+                    "id": "FieldSet example:FieldSet1:BodyText",
+                    "value": "You can choose one of the following phones:"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "check",
+                  "params": {
+                    "widget": "CheckBox",
                     "id": "FieldSet example:FieldSet1:Samsung"
-                },
-                "negated": false
+                  },
+                  "negated": false
+                }
+              ]
             }
-        ]
-    },
-    {
-        "type": "settext",
-        "params": {
-            "value": "iPhone"
-        },
-        "negated": false,
-        "conditions": [
+          ],
+          "properties": [],
+          "widgets": [
             {
-                "type": "pick",
-                "params": {
-                    "widget": "RadioButton",
-                    "id": "FieldSet example:FieldSet1:iPhone"
+              "widget": "Label",
+              "id": "Choice",
+              "actions": [
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "Here is your selected choice"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "shown",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:FieldSet example"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Label",
+                        "id": "FieldSet example:FieldSet1:Header",
+                        "value": "Option selector"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Text",
+                        "id": "FieldSet example:FieldSet1:BodyText",
+                        "value": "You can choose one of the following phones:"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "check",
+                      "params": {
+                        "widget": "CheckBox",
+                        "id": "FieldSet example:FieldSet1:Samsung"
+                      },
+                      "negated": false
+                    }
+                  ]
+                }
+              ],
+              "properties": []
+            },
+            {
+              "widget": "Text",
+              "id": "Chosen phone",
+              "actions": [
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "Samsung"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "shown",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:FieldSet example"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Label",
+                        "id": "FieldSet example:FieldSet1:Header",
+                        "value": "Option selector"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Text",
+                        "id": "FieldSet example:FieldSet1:BodyText",
+                        "value": "You can choose one of the following phones:"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "check",
+                      "params": {
+                        "widget": "CheckBox",
+                        "id": "FieldSet example:FieldSet1:Samsung"
+                      },
+                      "negated": false
+                    }
+                  ]
                 },
-                "negated": false
-            }
-        ]
-    },
-    {
-        "type": "settext",
-        "params": {
-            "value": "HTC"
-        },
-        "negated": false,
-        "conditions": [
-            {
-                "type": "pick",
-                "params": {
-                    "widget": "RadioButton",
-                    "id": "FieldSet example:FieldSet1:HTC"
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "iPhone"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "shown",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:FieldSet example"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "check",
+                      "params": {
+                        "widget": "CheckBox",
+                        "id": "FieldSet example:FieldSet1:iPhone"
+                      },
+                      "negated": false
+                    }
+                  ]
                 },
-                "negated": false
-            }
-        ]
-    },
-    {
-        "type": "settext",
-        "params": {
-            "value": "Nokia"
-        },
-        "negated": false,
-        "conditions": [
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "HTC"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "shown",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:FieldSet example"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "check",
+                      "params": {
+                        "widget": "CheckBox",
+                        "id": "FieldSet example:FieldSet1:HTC"
+                      },
+                      "negated": false
+                    }
+                  ]
+                },
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "Nokia"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "shown",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:FieldSet example"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "check",
+                      "params": {
+                        "widget": "CheckBox",
+                        "id": "FieldSet example:FieldSet1:Nokia"
+                      },
+                      "negated": false
+                    }
+                  ]
+                }
+              ],
+              "properties": []
+            },
             {
-                "type": "pick",
-                "params": {
-                    "widget": "RadioButton",
+              "widget": "Text",
+              "id": "is it used or not",
+              "actions": [
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "Used"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "shown",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:FieldSet example"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "switch on",
+                      "params": {
+                        "widget": "ToggleButton",
+                        "id": "FieldSet example:FieldSet1:Used"
+                      },
+                      "negated": false
+                    }
+                  ]
+                }
+              ],
+              "properties": []
+            }
+          ]
+        },
+        {
+          "widget": "NumericStepper",
+          "id": "step",
+          "actions": [
+            {
+              "type": "SET_VARIABLE:value",
+              "params": {
+                "value": "2"
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "type": "shown",
+                  "params": {
+                    "widget": "BrowserWindow",
+                    "id": "null:FieldSet example"
+                  },
+                  "negated": false
+                },
+                {
+                  "type": "check",
+                  "params": {
+                    "widget": "CheckBox",
                     "id": "FieldSet example:FieldSet1:Nokia"
-                },
-                "negated": false
+                  },
+                  "negated": false
+                }
+              ]
             }
-        ]
+          ],
+          "properties": []
+        }
+      ],
+      "actions": []
+    },
+    {
+      "page": "Name Not Specified",
+      "widgets": [
+        {
+          "widget": "DropdownList",
+          "id": "Availability",
+          "actions": [
+            {
+              "type": "selected",
+              "params": {},
+              "negated": false,
+              "conditions": [
+                {
+                  "type": "selected",
+                  "params": {
+                    "widget": "DropdownList",
+                    "id": "null:Availability:Availability"
+                  },
+                  "negated": true
+                },
+                {
+                  "type": "select",
+                  "params": {
+                    "widget": "DropdownList",
+                    "id": "Name Not Specified:Availability:Availability",
+                    "type": "option",
+                    "typeId": "Morning"
+                  },
+                  "negated": false
+                }
+              ]
+            }
+          ],
+          "properties": [],
+          "widgets": []
+        }
+      ]
     }
-]
+  ]
+}
