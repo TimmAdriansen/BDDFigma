@@ -91,6 +91,7 @@ async function button(page: string, id: string): Promise<InstanceNode | null> {
 }
 
 async function browserWindow(id: string, first: boolean): Promise<InstanceNode | null> {
+    await figma.loadFontAsync({ family: 'Inter', style: 'Regular' });
     //resetPositionsArray(id);
 
     if (first) {
@@ -553,7 +554,7 @@ async function fieldSet(page: string, id: string, widgets: any[]): Promise<Insta
 
 }
 
-async function dropDownList(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
+async function dropDownList(page: string, id: string, properties: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionDropdown");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
@@ -591,9 +592,10 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
 
             let i = 0;
 
-            for (const widget of widgets) {
+            for (const property of properties) {
                 if (i == 0) {
                     if (MenuItem && "children" in MenuItem && ("reactions" in MenuItem)) {
+                        MenuItem.name = ".Menu item Dropdown:" + property.option;
                         const menuItemWithReactions = MenuItem as FrameNode | ComponentNode | InstanceNode;
 
                         let reactions = clone(menuItemWithReactions.reactions);
@@ -607,7 +609,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
                                         type: "SET_VARIABLE",
                                         variableId: textVar.id, // Assuming 'textVar.id' holds the new variable ID you want to use
                                         variableValue: {
-                                            value: widget.id, // Assuming 'widget.id' is the new value you want to set
+                                            value: property.option, // Assuming 'widget.id' is the new value you want to set
                                             type: "STRING",
                                             resolvedType: "STRING"
                                         }
@@ -621,7 +623,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
                         const textChild = MenuItem.children.find(child => child.type === "TEXT") as TextNode;
 
                         if (textChild) {
-                            textChild.characters = widget.id;
+                            textChild.characters = property.option;
                         }
                     }
                     i++
@@ -630,6 +632,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
                 const newMenu = MenuItem?.clone();
 
                 if (newMenu && "children" in newMenu) {
+                    newMenu.name = ".Menu item Dropdown:" + property.option;
                     textInputChild.appendChild(newMenu);
 
                     const newMenuItemWithReactions = newMenu as FrameNode | ComponentNode | InstanceNode;
@@ -645,7 +648,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
                                     type: "SET_VARIABLE",
                                     variableId: textVar.id, // Assuming 'textVar.id' holds the new variable ID you want to use
                                     variableValue: {
-                                        value: widget.id, // Assuming 'widget.id' is the new value you want to set
+                                        value: property.option, // Assuming 'widget.id' is the new value you want to set
                                         type: "STRING",
                                         resolvedType: "STRING"
                                     }
@@ -659,7 +662,7 @@ async function dropDownList(page: string, id: string, widgets: any[]): Promise<I
                     const textChild = newMenu.children.find(child => child.type === "TEXT") as TextNode;
 
                     if (textChild) {
-                        textChild.characters = widget.id;
+                        textChild.characters = property.option;
                     }
                 }
             }
@@ -761,7 +764,7 @@ async function listBox(page: string, id: string, widgets: any[]): Promise<Instan
 }
 
 //EXAMPLE OF GO TO PAGE WORKING!
-async function menu(page: string, id: string, widgets: any[]): Promise<InstanceNode | null> {
+async function menu(page: string, id: string, properties: any[]): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionMenu");
     let currentFrame: FrameNode | null = findFrameByName(page);
 
@@ -785,26 +788,28 @@ async function menu(page: string, id: string, widgets: any[]): Promise<InstanceN
 
             let i = 0;
 
-            for (const widget of widgets) {
+            for (const property of properties) {
                 if (i == 0) {
+                    menuItem.name = ".Menu item Dropdown:" + property.option;
                     const child = menuItem.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
                     const textChild = child.children.find(child => child.type === "TEXT") as TextNode;
 
                     if (textChild) {
-                        textChild.characters = widget.id;
+                        textChild.characters = property.option;
                     }
                     i++
                     continue
                 }
 
                 const newMenu = menuItem?.clone();
+                newMenu.name = ".Menu item Dropdown:" + property.option;
                 containerVariant.appendChild(newMenu);
 
                 const child = newMenu.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
                 const textChild = child.children.find(child => child.type === "TEXT") as TextNode;
 
                 if (textChild) {
-                    textChild.characters = widget.id;
+                    textChild.characters = property.option;
                 }
 
             }
@@ -959,7 +964,7 @@ async function modalWindow(page: string, id: string, widgets: any[]): Promise<In
 
         //foreach widget append instance
         for (const widget of widgets) {
-            let instance = await callFunctionByName(widget.widget, [page, widget.id, widget.properties])
+            let instance = await callFunctionByName(widget.widget, [page, id + ":" + widget.id, widget.properties])
             if (instance) {
                 containerVariant.appendChild(instance);
             }
@@ -1160,10 +1165,11 @@ const functionMap: FunctionMap = {
     "NumericStepper": numericStepper,
     "Text": text,
     "Label": label,
-
 };
 
 export async function callFunctionByName(functionName: string, params: any[] = []): Promise<InstanceNode | null> {
+    console.log(functionName);
+    console.log(params);
     if (functionMap[functionName]) {
         return await functionMap[functionName](...params);
     } else {
@@ -1172,7 +1178,7 @@ export async function callFunctionByName(functionName: string, params: any[] = [
     }
 }
 
-export function getVariableCollection(){
+export function getVariableCollection() {
     return collection;
 }
 

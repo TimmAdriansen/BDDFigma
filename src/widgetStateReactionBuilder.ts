@@ -26,20 +26,34 @@ export class WidgetStateReactionsBuilder {
 
 
     buildAction(id: string, action: any, widget: string) {
-        //console.log(id);
+        console.log("HERE:")
+        console.log(id);
         //console.log(widget);
         //console.log(action)
 
         let eventCondition = action.conditions[action.conditions.length - 1];
         let eventID = eventCondition.params.id;
         //console.log(eventID);
-        const eventWidget = findInstanceByName(eventID);
+        let eventWidget = findInstanceByName(eventID);
+        let mainWidget = null;
+        if (eventCondition.params.widget == "DropdownList" /*add more*/) {
+            let baseName = ".Menu item Dropdown:"; //change if other type - actually no, just standardise names
+            mainWidget = findInstanceByName(eventID);
+            mainWidget?.setProperties({ 'Type': 'Open' }); //make sure name is the same in file aswell
+            const textInputChild = mainWidget?.children.find(child => child.name === "Text Input") as InstanceNode; //make sure name is the same in file aswell
+            eventWidget = textInputChild?.children.find(child => child.name === baseName+eventCondition.params.typeId) as InstanceNode;
+        }
+        if (eventCondition.params.widget == "Menu" /*add more*/) {
+            let baseName = ".Menu item Dropdown:"; //change if other type - actually no, just standardise names
+            mainWidget = findInstanceByName(eventID);
+            eventWidget = mainWidget?.children.find(child => child.name === baseName+eventCondition.params.typeId) as InstanceNode;
+        }
         //console.log(eventWidget);
 
         let commonStates = ['displayed', 'shown', 'available', 'enabled', 'disabled'];
 
         let mainAction = this.determineAction(id, action, widget);
-        console.log(id)
+        //console.log(id)
         //console.log(mainAction);
         let mainActions: Action[] = [];
         if (mainAction != null) {
@@ -51,7 +65,6 @@ export class WidgetStateReactionsBuilder {
         };
 
         let expression;
-        //Bruh it is here i need to check when it is given states
         for (let index = 0; index < action.conditions.length; index++) {
             const element = action.conditions[index];
             if (!commonStates.includes(element.type) && index != action.conditions.length - 1) {
@@ -62,11 +75,11 @@ export class WidgetStateReactionsBuilder {
                         let equalOrNot = null;
                         if (paramsValue == undefined) {
                             if (!element.negated) {
-                                let returnValue = lookupWidgetState(element.params.widget, element.type)
+                                let returnValue = lookupWidgetState(element.params.widget, element.type, "x")
                                 paramsValue = returnValue[0];
                                 equalOrNot = returnValue[1];
-                            } else{
-                                let returnValue = lookupWidgetState(element.params.widget, "not " + element.type)
+                            } else {
+                                let returnValue = lookupWidgetState(element.params.widget, "not " + element.type, "x")
                                 paramsValue = returnValue[0];
                                 equalOrNot = returnValue[1];
                             }
@@ -77,9 +90,9 @@ export class WidgetStateReactionsBuilder {
                             paramsValue = handleNullValue(element.params.widget);
                         }
                         let expressionFunction: ExpressionFunction;
-                        if(equalOrNot == "EQUALS" || equalOrNot == "NOT_EQUAL"){
+                        if (equalOrNot == "EQUALS" || equalOrNot == "NOT_EQUAL") {
                             expressionFunction = equalOrNot;
-                        } else{
+                        } else {
                             expressionFunction = (element.negated === false) ? "EQUALS" : "NOT_EQUAL";
                         }
 
@@ -133,6 +146,11 @@ export class WidgetStateReactionsBuilder {
                 }
             }
             eventWidget.reactions = reactions;
+        }
+
+        //KINDA ANNOYING BUT LETS JUST KEEP IT LIKE THIS...
+        if(mainWidget){
+           // mainWidget?.setProperties({ 'Type': 'Closed' }); //make sure name is the same in file aswell
         }
 
         //for now lets ignore shown/displayed/etc
@@ -490,6 +508,11 @@ function handleNullValue(widget: string) {
     return defaultWidgetValues[widget] || "";
 }
 
+function handleValue(param: string): string {
+    return `with ${param}`;
+}
+
+
 type StateGroup = {
     states: string[];
     values: any[];
@@ -529,7 +552,7 @@ const widgetStateMapping: WidgetStateMapping = {
         { states: ['selected', 'chosen', 'clicked', 'not selected', 'not chosen', 'not clicked'], values: ['Link selected', 'Link chosen', 'Link clicked', 'Link not selected', 'Link not chosen', 'Link not clicked'], extraValues: ['Additional Value 43', 'Additional Value 44', 'Additional Value 45', 'Additional Value 46', 'Additional Value 47', 'Additional Value 48'] },
     ],
     DropdownList: [
-        { states: ['selected', 'chosen', 'picked', 'not selected', 'not chosen', 'not picked'], values: ['DropdownList selected', 'DropdownList chosen', 'DropdownList picked', 'DropdownList not selected', 'DropdownList not chosen', 'DropdownList not picked'], extraValues: ['Additional Value 49', 'Additional Value 50', 'Additional Value 51', 'Additional Value 52', 'Additional Value 53', 'Additional Value 54'] },
+        { states: ['selected', 'chosen', 'picked', 'not selected', 'not chosen', 'not picked'], values: [(param: string) => param, (param: string) => param, (param: string) => param, (param: string) => param, (param: string) => param, (param: string) => param], extraValues: ['EQUALS', 'EQUALS', 'EQUALS', 'NOT_EQUAL', 'NOT_EQUAL', 'NOT_EQUAL'] },
     ],
     Menu: [
         { states: ['clicked', 'selected', 'not clicked', 'not selected'], values: ['Menu clicked', 'Menu selected', 'Menu not clicked', 'Menu not selected'], extraValues: ['Additional Value 55', 'Additional Value 56', 'Additional Value 57', 'Additional Value 58'] },
@@ -538,13 +561,13 @@ const widgetStateMapping: WidgetStateMapping = {
         { states: ['clicked', 'selected', 'not clicked', 'not selected'], values: ['MenuItem clicked', 'MenuItem selected', 'MenuItem not clicked', 'MenuItem not selected'], extraValues: ['Additional Value 59', 'Additional Value 60', 'Additional Value 61', 'Additional Value 62'] },
     ],
     Grid: [
-        { states: ['clicked', 'selected', 'typed', 'compared', 'not clicked', 'not selected', 'not typed', 'not compared'], values: ['Grid clicked', 'Grid selected', 'Grid typed', 'Grid compared', 'Grid not clicked', 'Grid not selected', 'Grid not typed', 'Grid not compared'], extraValues: ['Additional Value 63', 'Additional Value 64', 'Additional Value 65', 'Additional Value 66', 'Additional Value 67', 'Additional Value 68', 'Additional Value 69', 'Additional Value 70'] },
+        { states: ['clicked', 'selected', 'typed', 'compared', 'not clicked', 'not selected', 'not typed', 'not compared'], values: [(param: string) => handleValue(param), 'Grid selected', 'Grid typed', 'Grid compared', 'Grid not clicked', 'Grid not selected', 'Grid not typed', 'Grid not compared'], extraValues: ['Additional Value 63', 'Additional Value 64', 'Additional Value 65', 'Additional Value 66', 'Additional Value 67', 'Additional Value 68', 'Additional Value 69', 'Additional Value 70'] },
     ],
     TextField: [
         { states: ['typed', 'set', 'filled', 'not typed', 'not set', 'not filled'], values: [handleNullValue("TextField"), handleNullValue("TextField"), handleNullValue("TextField"), handleNullValue("TextField"), handleNullValue("TextField"), handleNullValue("TextField")], extraValues: ['NOT_EQUAL', 'NOT_EQUAL', 'NOT_EQUAL', 'EQUALS', 'EQUALS', 'EQUALS'] },
     ],
     TextArea: [
-        { states: ['typed', 'set', 'filled', 'not typed', 'not set', 'not filled'], values: ['TextArea typed', 'TextArea set', 'TextArea filled', 'TextArea not typed', 'TextArea not set', 'TextArea not filled'], extraValues: ['Additional Value 77', 'Additional Value 78', 'Additional Value 79', 'Additional Value 80', 'Additional Value 81', 'Additional Value 82'] },
+        { states: ['typed', 'set', 'filled', 'not typed', 'not set', 'not filled'], values: [handleNullValue("TextArea"), handleNullValue("TextArea"), handleNullValue("TextArea"), handleNullValue("TextArea"), handleNullValue("TextArea"), handleNullValue("TextArea")], extraValues: ['NOT_EQUAL', 'NOT_EQUAL', 'NOT_EQUAL', 'EQUALS', 'EQUALS', 'EQUALS'] },
     ],
     BrowserWindow: [
         { states: ['displayed', 'shown', 'available', 'not displayed', 'not shown', 'not available'], values: ['BrowserWindow displayed', 'BrowserWindow shown', 'BrowserWindow available', 'BrowserWindow not displayed', 'BrowserWindow not shown', 'BrowserWindow not available'], extraValues: ['Additional Value 83', 'Additional Value 84', 'Additional Value 85', 'Additional Value 86', 'Additional Value 87', 'Additional Value 88'] },
@@ -612,7 +635,7 @@ const widgetStateMapping: WidgetStateMapping = {
     ],
 };
 
-function lookupWidgetState(widget: string, state: string): [string, string | null] {
+function lookupWidgetState(widget: string, state: string, param: string): [string, string | null] {
     if (!widgetStateMapping[widget]) {
         return [`Widget ${widget} does not exist.`, null];
     }
@@ -621,7 +644,10 @@ function lookupWidgetState(widget: string, state: string): [string, string | nul
     for (let group of widgetStates) {
         if (group.states.includes(state)) {
             const index = group.states.indexOf(state);
-            return [group.values[index], group.extraValues[index]];
+            const value = typeof group.values[index] === 'function'
+                ? (group.values[index] as (widget: string, state: string, param: string) => string)(widget, state, param)
+                : group.values[index];
+            return [value, group.extraValues[index]];
         }
     }
 
