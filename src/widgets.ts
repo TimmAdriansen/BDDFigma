@@ -1017,6 +1017,148 @@ async function windowDialog(page: string, id: string): Promise<InstanceNode | nu
     return null;
 }
 
+async function grid(page: string, id: string, cells: any[]): Promise<InstanceNode | null> {
+    const component = findComponentSetByName("InteractionGrid");
+
+    if (!component) {
+        return null;
+    }
+
+    let maxX = 0;
+    let maxY = 0;
+
+    for(const cell of cells) {
+        const [x, y] = cell.id.split(':').map(Number);
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+    };
+
+    let newComponent = component.clone()
+
+    newComponent.name = page + ":" + id;
+
+    newComponent.x = -500;
+    newComponent.y = -500;
+
+    figma.currentPage.appendChild(newComponent);
+    if (newComponent && "children" in newComponent) {
+        const containerVariant = newComponent.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+        if (containerVariant && "children" in containerVariant) {
+            const Table_Row_Default = containerVariant.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+            if (Table_Row_Default && "children" in Table_Row_Default) {
+                Table_Row_Default.name = "Row: 0";
+                const Table_Cell = Table_Row_Default.children[0] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+                Table_Cell.name = "Coloumn: 0";
+                for (let i = 1; i <= maxX; i++) {
+                    const newTableCell = Table_Cell?.clone();
+                    newTableCell.name = "Coloumn:" + i;
+                    Table_Row_Default.insertChild(Table_Row_Default.children.length - 1, newTableCell);
+                }
+                for (let i = 1; i <= maxY; i++) {
+                    const newTableRowDefault = Table_Row_Default?.clone();
+                    newTableRowDefault.name = "Row: " + i;
+                    containerVariant.insertChild(containerVariant.children.length - 1, newTableRowDefault);
+                }
+            }
+            function detachIfInstance(node: SceneNode): SceneNode {
+                // Walk up the entire hierarchy and detach if any node is an instance
+                let currentNode = node;
+                while (currentNode.parent) {
+                    if (currentNode.type === "INSTANCE") {
+                        console.log("Detaching instance:", currentNode.name);
+                        currentNode = currentNode.detachInstance(); // Detach the instance to make it a frame
+                    } else {
+                        currentNode = currentNode.parent as SceneNode;
+                    }
+                }
+                return node;
+            }
+
+            for(const cell of cells) {
+                const [x, y] = cell.id.split(':').map(Number);
+                let row = containerVariant.children[y] as SceneNode;
+
+                // Check if the row is a node type that has children
+                if (row.type === "FRAME" || row.type === "GROUP" || row.type === "COMPONENT" || row.type === "INSTANCE") {
+                    let column = row.children[x] as FrameNode;
+
+
+                    // Again, check if column is a node type that has children
+                    if (column.type === "FRAME" || column.type === "GROUP" || column.type === "COMPONENT" || column.type === "INSTANCE") {
+                        let content = column.children[1] as SceneNode;
+
+                        // Ensure content and all its parents are detached instances
+                        detachIfInstance(content);
+
+                        // Re-fetch the content node after detachment (since it may have changed)
+                        let editableContent = containerVariant.children[y] as SceneNode;
+
+                        if (editableContent.type === "FRAME" || editableContent.type === "GROUP" || editableContent.type === "COMPONENT") {
+                            let columnNode = editableContent.children[x] as SceneNode;
+
+                            if (columnNode.type === "FRAME" || columnNode.type === "GROUP" || columnNode.type === "COMPONENT") {
+                                let finalContent = columnNode.children[1] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+
+                                for (const widget of cell.widgets) {
+                                    let instance = await callFunctionByName(widget.widget, [page, id + ":" + x + ":" + y + ":" + widget.id, widget.properties])
+                                    if (instance) {
+                                        console.log("HOLA" + x + " " + y)
+                                        console.log(finalContent.width);
+                                        finalContent.appendChild(instance);
+                                        console.log(finalContent.width);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            };
+
+            const columnWidths: Record<number, number> = {};
+
+            for(const cell of cells) {
+                const [x, y] = cell.id.split(':').map(Number);
+                let row = containerVariant.children[y] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+                let column = row.children[x] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+
+                if (!columnWidths[x] || columnWidths[x] < column.width) {
+                    let width = 105;
+                    if(column.width > width){
+                        width = column.width;
+                    }
+                    columnWidths[x] = width;
+                }
+            };
+
+            Object.entries(columnWidths).forEach(([columnIndex, width]) => {
+                const columnIndexNumber = parseInt(columnIndex, 10);
+                console.log(`Column ${columnIndexNumber} should have width: ${width}`);
+                for (let i = 0; i <= maxY; i++) {
+                    let row = containerVariant.children[i] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+                    let column = row.children[columnIndexNumber] as FrameNode | GroupNode | ComponentNode | InstanceNode;
+                    column.resize(width, column.height);
+                }
+            });
+
+        }
+    }
+
+
+
+    let currentFrame: FrameNode | null = findFrameByName(page);
+
+    const newInstance = createInstanceFromSet(newComponent, currentFrame, startOffset, gridSpacing, id, null, page);
+
+    if (newInstance) {
+        //newComponent.remove();
+        return newInstance;
+    }
+
+    return null;
+}
+
+
 async function notification(page: string, id: string): Promise<InstanceNode | null> {
     const component = findComponentSetByName("InteractionBreadcrumb");
 
@@ -1141,6 +1283,35 @@ async function label(page: string, id: string, properties: any[]): Promise<Insta
     return null;
 }
 
+function resizeToFit(node: FrameNode | GroupNode) {
+    if (node.children.length === 0) {
+        console.log("No children to fit");
+        return;
+    }
+
+    let minX = Infinity, minY = Infinity;
+    let maxX = -Infinity, maxY = -Infinity;
+
+    // Calculate the bounding box of all child elements
+    node.children.forEach(child => {
+        const childBounds = child.absoluteTransform;
+        const [x, y] = [childBounds[0][2], childBounds[1][2]];
+        const { width, height } = child;
+
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x + width);
+        maxY = Math.max(maxY, y + height);
+    });
+
+    const newWidth = maxX - minX;
+    const newHeight = maxY - minY;
+
+    // Resize the node to fit all its children
+    node.resize(newWidth, newHeight);
+    console.log(`Resized to width: ${newWidth}, height: ${newHeight}`);
+}
+
 const functionMap: FunctionMap = {
     "Button": button,
     "BrowserWindow": browserWindow,
@@ -1157,6 +1328,7 @@ const functionMap: FunctionMap = {
     "ModalWindow": modalWindow,
     "WindowDialog": modalWindow,
     "Notification": modalWindow,
+    "Grid": grid,
     "DropdownList": dropDownList,
     "ListBox": listBox,
     "Menu": menu,
@@ -1168,7 +1340,7 @@ const functionMap: FunctionMap = {
 };
 
 export async function callFunctionByName(functionName: string, params: any[] = []): Promise<InstanceNode | null> {
-    console.log(functionName);
+    console.log("Function Name:", functionName);
     console.log(params);
     if (functionMap[functionName]) {
         return await functionMap[functionName](...params);

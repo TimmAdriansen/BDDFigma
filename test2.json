@@ -1,105 +1,151 @@
 {
   "BrowserWindows": [
     {
-      "page": "Login Page",
+      "page": "GridTest",
       "widgets": [
         {
-          "widget": "TextField",
-          "id": "Username",
+          "widget": "Grid",
+          "id": "Grid",
           "actions": [],
-          "properties": []
-        },
-        {
-          "widget": "TextField",
-          "id": "Password",
-          "actions": [],
-          "properties": []
-        },
-        {
-          "widget": "Button",
-          "id": "Login",
-          "actions": [],
-          "properties": []
-        }
-      ],
-      "actions": []
-    },
-    {
-      "page": "Home Page",
-      "widgets": [
-        {
-          "widget": "DropdownList",
-          "id": "Dlist",
-          "actions": [],
-          "properties": [
+          "properties": [],
+          "cells": [
             {
-              "option": "a"
+              "id": "6:5",
+              "widgets": [
+                {
+                  "widget": "Text",
+                  "id": "text",
+                  "actions": [],
+                  "properties": [
+                    {
+                      "text": "8"
+                    }
+                  ]
+                }
+              ]
             },
             {
-              "option": "b"
+              "id": "0:0",
+              "widgets": [
+                {
+                  "widget": "Button",
+                  "id": "Button",
+                  "actions": [],
+                  "properties": []
+                }
+              ]
+            },
+            {
+              "id": "0:0",
+              "widgets": [
+                {
+                  "widget": "Text",
+                  "id": "text",
+                  "actions": [
+                    {
+                      "type": "SET_VARIABLE:text",
+                      "params": {
+                        "value": "23231"
+                      },
+                      "negated": false,
+                      "conditions": [
+                        {
+                          "type": "displayed",
+                          "params": {
+                            "widget": "BrowserWindow",
+                            "id": "null:GridTest"
+                          },
+                          "negated": false
+                        },
+                        {
+                          "type": "textIs",
+                          "params": {
+                            "widget": "Text",
+                            "id": "GridTest:Grid:text",
+                            "value": "8"
+                          },
+                          "negated": false
+                        },
+                        {
+                          "type": "click",
+                          "params": {
+                            "widget": "Button",
+                            "id": "GridTest:Grid:Button"
+                          },
+                          "negated": false
+                        }
+                      ]
+                    }
+                  ],
+                  "properties": []
+                }
+              ]
+            },
+            {
+              "id": "3:0",
+              "widgets": [
+                {
+                  "widget": "Text",
+                  "id": "text",
+                  "actions": [
+                    {
+                      "type": "SET_VARIABLE:text",
+                      "params": {
+                        "value": "IT WORKS!"
+                      },
+                      "negated": false,
+                      "conditions": [
+                        {
+                          "type": "displayed",
+                          "params": {
+                            "widget": "BrowserWindow",
+                            "id": "null:Home"
+                          },
+                          "negated": false
+                        },
+                        {
+                          "type": "textIs",
+                          "params": {
+                            "widget": "Text",
+                            "id": "Home:DateAndTimeFieldSet:DayOfWeek",
+                            "value": "Saturday"
+                          },
+                          "negated": false
+                        },
+                        {
+                          "type": "textIs",
+                          "params": {
+                            "widget": "Text",
+                            "id": "Home:DateAndTimeFieldSet:Date",
+                            "value": "21-05-2024"
+                          },
+                          "negated": false
+                        },
+                        {
+                          "type": "textIs",
+                          "params": {
+                            "widget": "Text",
+                            "id": "Home:DateAndTimeFieldSet:Time",
+                            "value": "14:58"
+                          },
+                          "negated": false
+                        },
+                        {
+                          "type": "click",
+                          "params": {
+                            "widget": "Button",
+                            "id": "Home:DateAndTimeFieldSet:Button"
+                          },
+                          "negated": false
+                        }
+                      ]
+                    }
+                  ],
+                  "properties": []
+                }
+              ]
             }
           ]
-        },
-        {
-          "widget": "Label",
-          "id": "Label",
-          "actions": [
-            {
-              "type": "SET_VARIABLE:text",
-              "params": {
-                "value": "a"
-              },
-              "negated": false,
-              "conditions": [
-                {
-                  "type": "displayed",
-                  "params": {
-                    "widget": "BrowserWindow",
-                    "id": "null:Home Page"
-                  },
-                  "negated": false
-                },
-                {
-                  "type": "select",
-                  "params": {
-                    "widget": "DropdownList",
-                    "id": "Home Page:Dlist",
-                    "type": "option",
-                    "typeId": "a"
-                  },
-                  "negated": false
-                }
-              ]
-            },
-            {
-              "type": "SET_VARIABLE:text",
-              "params": {
-                "value": "b"
-              },
-              "negated": false,
-              "conditions": [
-                {
-                  "type": "displayed",
-                  "params": {
-                    "widget": "BrowserWindow",
-                    "id": "null:Home Page"
-                  },
-                  "negated": false
-                },
-                {
-                  "type": "select",
-                  "params": {
-                    "widget": "DropdownList",
-                    "id": "Home Page:Dlist",
-                    "type": "option",
-                    "typeId": "b"
-                  },
-                  "negated": false
-                }
-              ]
-            }
-          ],
-          "properties": []
         }
       ],
       "actions": [
@@ -112,23 +158,34 @@
               "type": "displayed",
               "params": {
                 "widget": "BrowserWindow",
-                "id": "null:Login Page"
+                "id": "null:Home"
               },
               "negated": false
             },
             {
-              "type": "typed",
+              "type": "textIs",
               "params": {
-                "widget": "TextField",
-                "id": "Login Page:Username"
+                "widget": "Text",
+                "id": "Home:DateAndTimeFieldSet:DayOfWeek",
+                "value": "Saturday"
               },
               "negated": false
             },
             {
-              "type": "set",
+              "type": "textIs",
               "params": {
-                "widget": "TextField",
-                "id": "Login Page:Password"
+                "widget": "Text",
+                "id": "Home:DateAndTimeFieldSet:Date",
+                "value": "21-05-2024"
+              },
+              "negated": false
+            },
+            {
+              "type": "textIs",
+              "params": {
+                "widget": "Text",
+                "id": "Home:DateAndTimeFieldSet:Time",
+                "value": "14:58"
               },
               "negated": false
             },
@@ -136,7 +193,7 @@
               "type": "click",
               "params": {
                 "widget": "Button",
-                "id": "Login Page:Login"
+                "id": "Home:DateAndTimeFieldSet:Button"
               },
               "negated": false
             }
@@ -148,405 +205,51 @@
       "page": "Home",
       "widgets": [
         {
-          "widget": "Menu",
-          "id": "MainMenu",
+          "widget": "FieldSet",
+          "id": "DateAndTimeFieldSet",
           "actions": [],
-          "properties": [
+          "properties": [],
+          "widgets": [
             {
-              "option": "Home"
+              "widget": "Text",
+              "id": "DayOfWeek",
+              "actions": [],
+              "properties": [
+                {
+                  "text": "Saturday"
+                }
+              ]
             },
             {
-              "option": "Options"
+              "widget": "Text",
+              "id": "Date",
+              "actions": [],
+              "properties": [
+                {
+                  "text": "21-05-2024"
+                }
+              ]
             },
             {
-              "option": "Log"
+              "widget": "Text",
+              "id": "Time",
+              "actions": [],
+              "properties": [
+                {
+                  "text": "14:58"
+                }
+              ]
             },
             {
-              "option": "Settings"
+              "widget": "Button",
+              "id": "Button",
+              "actions": [],
+              "properties": []
             }
           ]
         }
       ],
-      "actions": [
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Options"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Options:MainMenu",
-                "type": "option",
-                "typeId": "Home"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Log"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Log:MainMenu",
-                "type": "option",
-                "typeId": "Home"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Settings"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Settings:MainMenu",
-                "type": "option",
-                "typeId": "Home"
-              },
-              "negated": false
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "page": "Options",
-      "widgets": [
-        {
-          "widget": "Menu",
-          "id": "MainMenu",
-          "actions": [],
-          "properties": [
-            {
-              "option": "Home"
-            },
-            {
-              "option": "Options"
-            },
-            {
-              "option": "Log"
-            },
-            {
-              "option": "Settings"
-            }
-          ]
-        }
-      ],
-      "actions": [
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Home"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Home:MainMenu",
-                "type": "option",
-                "typeId": "Options"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Log"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Log:MainMenu",
-                "type": "option",
-                "typeId": "Options"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Settings"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Settings:MainMenu",
-                "type": "option",
-                "typeId": "Options"
-              },
-              "negated": false
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "page": "Log",
-      "widgets": [
-        {
-          "widget": "Menu",
-          "id": "MainMenu",
-          "actions": [],
-          "properties": [
-            {
-              "option": "Home"
-            },
-            {
-              "option": "Options"
-            },
-            {
-              "option": "Log"
-            },
-            {
-              "option": "Settings"
-            }
-          ]
-        }
-      ],
-      "actions": [
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Home"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Home:MainMenu",
-                "type": "option",
-                "typeId": "Log"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Options"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Options:MainMenu",
-                "type": "option",
-                "typeId": "Log"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Settings"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Settings:MainMenu",
-                "type": "option",
-                "typeId": "Log"
-              },
-              "negated": false
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "page": "Settings",
-      "widgets": [
-        {
-          "widget": "Menu",
-          "id": "MainMenu",
-          "actions": [],
-          "properties": [
-            {
-              "option": "Home"
-            },
-            {
-              "option": "Options"
-            },
-            {
-              "option": "Log"
-            },
-            {
-              "option": "Settings"
-            }
-          ]
-        }
-      ],
-      "actions": [
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Home"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Home:MainMenu",
-                "type": "option",
-                "typeId": "Settings"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Options"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Options:MainMenu",
-                "type": "option",
-                "typeId": "Settings"
-              },
-              "negated": false
-            }
-          ]
-        },
-        {
-          "type": "displayed",
-          "params": {},
-          "negated": false,
-          "conditions": [
-            {
-              "type": "displayed",
-              "params": {
-                "widget": "BrowserWindow",
-                "id": "null:Log"
-              },
-              "negated": false
-            },
-            {
-              "type": "select",
-              "params": {
-                "widget": "Menu",
-                "id": "Log:MainMenu",
-                "type": "option",
-                "typeId": "Settings"
-              },
-              "negated": false
-            }
-          ]
-        }
-      ]
+      "actions": []
     }
   ]
 }
