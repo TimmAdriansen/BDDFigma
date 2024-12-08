@@ -26,8 +26,6 @@ export class WidgetStateReactionsBuilder {
 
 
     buildAction(id: string, action: any, widget: string) {
-        console.log("HERE:")
-        console.log(id);
         //console.log(widget);
         //console.log(action)
 

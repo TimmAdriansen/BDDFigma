@@ -1065,7 +1065,6 @@ async function grid(page: string, id: string, cells: any[]): Promise<InstanceNod
                 let currentNode = node;
                 while (currentNode.parent) {
                     if (currentNode.type === "INSTANCE") {
-                        console.log("Detaching instance:", currentNode.name);
                         currentNode = currentNode.detachInstance(); // Detach the instance to make it a frame
                     } else {
                         currentNode = currentNode.parent as SceneNode;
@@ -1100,14 +1099,13 @@ async function grid(page: string, id: string, cells: any[]): Promise<InstanceNod
                                 let finalContent = columnNode.children[1] as FrameNode | GroupNode | ComponentNode | InstanceNode;
 
                                 for (const widget of cell.widgets) {
-                                    let instance = await callFunctionByName(widget.widget, [page, id + ":" + x + ":" + y + ":" + widget.id, widget.properties])
+                                    containerID = id + ":" + x + ":" + y + ":";
+                                    let instance = await callFunctionByName(widget.widget, [page, widget.id, widget.properties])
                                     if (instance) {
-                                        console.log("HOLA" + x + " " + y)
-                                        console.log(finalContent.width);
                                         finalContent.appendChild(instance);
-                                        console.log(finalContent.width);
                                     }
                                 }
+                                containerID = "";
 
                             }
                         }
@@ -1340,8 +1338,6 @@ const functionMap: FunctionMap = {
 };
 
 export async function callFunctionByName(functionName: string, params: any[] = []): Promise<InstanceNode | null> {
-    console.log("Function Name:", functionName);
-    console.log(params);
     if (functionMap[functionName]) {
         return await functionMap[functionName](...params);
     } else {

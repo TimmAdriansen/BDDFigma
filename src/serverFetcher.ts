@@ -82,7 +82,7 @@ async function loopData(data: string): Promise<void> {
             for (const widget of window.widgets) {
                 if (widget.widget === "FieldSet" || /*widget.widget === "DropdownList" || widget.widget === "ListBox" || widget.widget === "Menu" || */widget.widget === "ModalWindow" || widget.widget === "WindowDialog") {
                     await callFunctionByName(widget.widget, [window.page, widget.id, widget.widgets, widget.properties]);
-                } else if (widget.widget === "Grid") { 
+                } else if (widget.widget === "Grid") {
                     await callFunctionByName(widget.widget, [window.page, widget.id, widget.cells, widget.properties]);
                 }
                 else {
@@ -127,6 +127,23 @@ function processWidgetActions(page: string, widget: any, containerID = "") {
             parentContainerID = containerID + widget.id + ":"
         }
         widget.widgets.forEach((nestedWidget: any) => processWidgetActions(page, nestedWidget, parentContainerID));
+    }
+
+    if (widget.widget === "Grid" && widget.cells && widget.cells.length > 0) {
+        console.log("Grid!!!!");
+        console.log(widget);
+        widget.cells.forEach((cell: any) => {
+            let cellContainerID = containerID + widget.id + ":" + cell.id + ":";
+            if (cell.widgets && cell.widgets.length > 0) {
+                cell.widgets.forEach((cellWidget: any) => {
+                    console.log(`Processing cell widget:`, {
+                        cellWidget,
+                        cellContainerID,
+                    });
+                    processWidgetActions(page, cellWidget, cellContainerID);
+                });
+            }
+        });
     }
 }
 
