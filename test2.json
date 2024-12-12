@@ -85,7 +85,7 @@
                           "type": "textIs",
                           "params": {
                             "widget": "Text",
-                            "id": "GridTest:Grid:6:5:text",
+                            "id": "GridTest:Grid:3:0:text",
                             "value": "IT DOESNT WORK!"
                           },
                           "negated": false
@@ -105,7 +105,9 @@
                 }
               ]
             }
-          ]
+          ],
+          "x": 50,
+          "y": 50
         }
       ],
       "actions": []
@@ -127,7 +129,9 @@
                 {
                   "text": "Saturday"
                 }
-              ]
+              ],
+              "x": 150,
+              "y": 100
             },
             {
               "widget": "Text",
@@ -137,7 +141,9 @@
                 {
                   "text": "21-05-2024"
                 }
-              ]
+              ],
+              "x": 150,
+              "y": 150
             },
             {
               "widget": "Text",
@@ -194,21 +200,79 @@
                       "negated": false
                     }
                   ]
+                },
+                {
+                  "type": "SET_VARIABLE:text",
+                  "params": {
+                    "value": "huh"
+                  },
+                  "negated": false,
+                  "conditions": [
+                    {
+                      "type": "displayed",
+                      "params": {
+                        "widget": "BrowserWindow",
+                        "id": "null:Home"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Text",
+                        "id": "Home:DateAndTimeFieldSet:DayOfWeek",
+                        "value": "Saturday"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Text",
+                        "id": "Home:DateAndTimeFieldSet:Date",
+                        "value": "21-05-2024"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "textIs",
+                      "params": {
+                        "widget": "Text",
+                        "id": "Home:DateAndTimeFieldSet:Time",
+                        "value": "14:58"
+                      },
+                      "negated": false
+                    },
+                    {
+                      "type": "click",
+                      "params": {
+                        "widget": "Button",
+                        "id": "Home:DateAndTimeFieldSet:Button"
+                      },
+                      "negated": false
+                    }
+                  ]
                 }
               ],
               "properties": [
                 {
                   "text": "14:58"
                 }
-              ]
+              ],
+              "x": 150,
+              "y": 200
             },
             {
               "widget": "Button",
               "id": "Button",
               "actions": [],
-              "properties": []
+              "properties": [],
+              "x": 150,
+              "y": 300
             }
-          ]
+          ],
+          "x": 100,
+          "y": 50
         }
       ],
       "actions": []

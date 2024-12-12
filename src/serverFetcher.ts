@@ -70,6 +70,8 @@ async function loopData(data: string): Promise<void> {
 
     collection?.remove();
 
+    let useGPTLayout = false;
+
 
     try {
         const jsonData = JSON.parse(data);
@@ -80,19 +82,37 @@ async function loopData(data: string): Promise<void> {
             first = false;
             //console.log(`Page: ${window.page}`);
             for (const widget of window.widgets) {
+                let args = [window.page, widget.id];
                 if (widget.widget === "FieldSet" || /*widget.widget === "DropdownList" || widget.widget === "ListBox" || widget.widget === "Menu" || */widget.widget === "ModalWindow" || widget.widget === "WindowDialog") {
-                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.widgets, widget.properties]);
+                    args.push(widget.widgets, widget.properties);
+                    //await callFunctionByName(widget.widget, [window.page, widget.id, widget.widgets, widget.properties]);
                 } else if (widget.widget === "Grid") {
-                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.cells, widget.properties]);
+                    args.push(widget.cells, widget.properties);
+                    //await callFunctionByName(widget.widget, [window.page, widget.id, widget.cells, widget.properties]);
                 }
                 else {
-                    await callFunctionByName(widget.widget, [window.page, widget.id, widget.properties]);
+                    args.push(widget.properties);
+                    //await callFunctionByName(widget.widget, [window.page, widget.id, widget.properties]);
+                }
+
+                if ('x' in widget && 'y' in widget) {
+                    useGPTLayout = true;
+                    args.push(widget.x, widget.y);
+                }
+
+                let instance = await callFunctionByName(widget.widget, args);
+
+                if(useGPTLayout && instance){
+                    instance.x = widget.x;
+                    instance.y = widget.y;
                 }
                 //console.log(` Widget: Type - ${widget.widget}, ID - ${widget.id}`);
             }
             //await pushToAllPositions();
         }
-        layoutPages(); // Call layoutPages after all the asynchronous operations have completed
+        if (!useGPTLayout) {
+            layoutPages(); // Call layoutPages after all the asynchronous operations have completed
+        }
         resetAllPositions();
         widgetStateReactionBuilder = new WidgetStateReactionsBuilder(getVariableCollection());
 
